@@ -1089,5 +1089,7 @@ You can manage these permissions at any time in the Health Connect app settings.
 
     <string name="tile_glucose_value">Glucose value</string>
     <string name="tile_glucose_graph">Glucose graph</string>
+    <string name="tile_glucose_details">Glucose details</string>
+    <string name="tile_sensor_age">Sensor age: %1$s</string>
     <string name="info_label_eiob_talkback">effective I.O.B.</string>
 </resources>

@@ -20,6 +20,7 @@ import de.michelinside.glucodatahandler.tile.GlucoseGraphTileUpdater
 import de.michelinside.glucodatahandler.tile.GlucoseValueTileUpdater
 import de.michelinside.glucodatahandler.common.utils.PackageUtils
 import de.michelinside.glucodatahandler.common.utils.Utils
+import de.michelinside.glucodatahandler.tile.GlucoseDetailsTileUpdater
 
 
 class  GlucoDataServiceWear: GlucoDataService(AppSource.WEAR_APP), NotifierInterface {
@@ -89,6 +90,7 @@ class  GlucoDataServiceWear: GlucoDataService(AppSource.WEAR_APP), NotifierInter
             ChartComplicationUpdater.init(this)
             InternalNotifier.addNotifier(this, GlucoseGraphTileUpdater, GlucoseGraphTileUpdater.filter)
             InternalNotifier.addNotifier(this, GlucoseValueTileUpdater, GlucoseValueTileUpdater.filter)
+            InternalNotifier.addNotifier(this, GlucoseDetailsTileUpdater, GlucoseDetailsTileUpdater.filter)
         } catch (ex: Exception) {
             Log.e(LOG_ID, "onCreate exception: " + ex)
         }
