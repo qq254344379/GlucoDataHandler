@@ -90,6 +90,7 @@ object Constants {
     const val SHARED_PREF_XDRIP_SERVER_1_MINUTE_INTERVAL = "xdrip_server_1_minute_interval"
     const val SHARED_PREF_SEND_TO_HEALTH_CONNECT = "send_to_health_connect"
     const val SHARED_PREF_SEND_TO_HEALTH_CONNECT_INTERVAL = "send_to_health_connect_interval"
+    const val SHARED_PREF_SEND_TO_HEALTH_ONLY_LAST_VALUE = "send_to_health_only_last_value"
     const val SHARED_PREF_HEALTH_CONNECT_LAST_VALUE_TIME = "health_connect_last_value_time"
     const val SHARED_PREF_TARGET_MIN = "target_min_value"
     const val SHARED_PREF_TARGET_MAX = "target_max_value"
