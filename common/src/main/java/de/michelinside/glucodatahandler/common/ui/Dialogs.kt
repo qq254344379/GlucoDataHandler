@@ -1,5 +1,7 @@
 package de.michelinside.glucodatahandler.common.ui
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.app.UiModeManager
 import android.content.Context
 import android.content.DialogInterface
@@ -8,6 +10,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import de.michelinside.glucodatahandler.common.Constants
 import de.michelinside.glucodatahandler.common.R
+import java.util.Calendar
 
 
 object Dialogs {
@@ -65,6 +68,45 @@ object Dialogs {
             .setNeutralButton(context.resources.getText(R.string.button_cancel), cancelListener)
             .setSingleChoiceItems(items, selectedItem,selectItemListener)
             .show()
+    }
+
+    fun showDateTimePicker(
+        context: Context,
+        initialTime: Long,
+        onDateTimeSelected: (Long) -> Unit
+    ) {
+        val calendar = Calendar.getInstance()
+        if (initialTime > 0)
+            calendar.timeInMillis = initialTime
+
+        val datePickerDialog = DatePickerDialog(
+            context,
+            { _, year, month, dayOfMonth ->
+                val timePickerDialog = TimePickerDialog(
+                    context,
+                    { _, hourOfDay, minute ->
+                        val resultCalendar = Calendar.getInstance()
+                        resultCalendar.set(Calendar.YEAR, year)
+                        resultCalendar.set(Calendar.MONTH, month)
+                        resultCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                        resultCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                        resultCalendar.set(Calendar.MINUTE, minute)
+                        resultCalendar.set(Calendar.SECOND, 0)
+                        resultCalendar.set(Calendar.MILLISECOND, 0)
+
+                        onDateTimeSelected(resultCalendar.timeInMillis)
+                    },
+                    calendar.get(Calendar.HOUR_OF_DAY),
+                    calendar.get(Calendar.MINUTE),
+                    true // 24h format
+                )
+                timePickerDialog.show()
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+        datePickerDialog.show()
     }
 
     fun updateColorScheme(context: Context) {

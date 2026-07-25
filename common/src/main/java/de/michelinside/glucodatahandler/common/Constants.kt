@@ -14,6 +14,7 @@ object Constants {
     const val REQUEST_DATA_MESSAGE_PATH = "/request_data_intent"
     const val COMMAND_PATH = "/command_intent"
     const val JSON_PATH_EXTENSION = "_json"
+    const val GDH_MANUAL_SENSOR_ID = "gdh_sensor_id"
 
     const val REQUEST_LOGCAT_MESSAGE_PATH = "/request_logcat_intent"
 

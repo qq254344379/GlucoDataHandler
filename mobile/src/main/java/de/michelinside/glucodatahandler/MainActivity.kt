@@ -522,6 +522,14 @@ class MainActivity : AppCompatActivity(), NotifierInterface {
                     startActivity(intent)
                     return true
                 }
+                R.id.action_new_sensor -> {
+                    Dialogs.showDateTimePicker(this, ReceiveData.sensorStartTime) { selectedTime ->
+                        val sensorId = if(ReceiveData.sensorID.isNullOrEmpty()) Constants.GDH_MANUAL_SENSOR_ID else ReceiveData.sensorID
+                        ReceiveData.setSensorStartTime(sensorId, selectedTime, true)
+                        updateDetailsTable()
+                    }
+                    return true
+                }
                 R.id.action_help -> {
                     val browserIntent = Intent(
                         Intent.ACTION_VIEW,
@@ -1039,7 +1047,7 @@ class MainActivity : AppCompatActivity(), NotifierInterface {
             if (!ReceiveData.isIobCobObsolete(1.days.inWholeSeconds.toInt()))
                 tableDetails.addView(createRow(CR.string.info_label_iob_cob_timestamp, DateFormat.getTimeInstance(
                     DateFormat.DEFAULT).format(Date(ReceiveData.iobCobTime))))
-            if (ReceiveData.sensorID?.isNotEmpty() == true) {
+            if (ReceiveData.sensorID?.isNotEmpty() == true && ReceiveData.sensorID != Constants.GDH_MANUAL_SENSOR_ID) {
                 if(ReceiveData.source == DataSource.AAPS)
                     tableDetails.addView(createRow(CR.string.label_profile, ReceiveData.sensorID!!))
                 else
@@ -1053,15 +1061,17 @@ class MainActivity : AppCompatActivity(), NotifierInterface {
                 if(runtime != null && runtime > 0F) {
                     val max = runtime * 24 * 60 // minutes
                     Log.d(LOG_ID, "Sensor age: ${Utils.formatDuration(duration)} - runtime: ${Utils.formatDurationFromSeconds(max.toLong()*60)}")
-                    val progress = min(duration.toMinutes().toFloat(), max)
-                    val color = if(max - progress <= 60) {
-                        ReceiveData.getAlarmTypeColor(AlarmType.VERY_LOW)
-                    } else if(max - progress <= (24*60)) {
-                        ReceiveData.getAlarmTypeColor(AlarmType.LOW)
-                    } else {
-                        resources.getColor(CR.color.main)
+                    if((max+300) > duration.toMinutes().toFloat()) {  // after 5h the sensor age is removed
+                        val progress = min(duration.toMinutes().toFloat(), max)
+                        val color = if(max - progress <= 60) {
+                            ReceiveData.getAlarmTypeColor(AlarmType.VERY_LOW)
+                        } else if(max - progress <= (24*60)) {
+                            ReceiveData.getAlarmTypeColor(AlarmType.LOW)
+                        } else {
+                            resources.getColor(CR.color.main)
+                        }
+                        tableDetails.addView(createProgressBarRow(CR.string.sensor_age_label, progress*100 / max, color, createSensorAgeColumn(duration, max)/* + "\n-> " + resources.getString(CR.string.sensor_age_value).format(diffDays, diffHours)*/))
                     }
-                    tableDetails.addView(createProgressBarRow(CR.string.sensor_age_label, progress*100 / max, color, createSensorAgeColumn(duration, max)/* + "\n-> " + resources.getString(CR.string.sensor_age_value).format(diffDays, diffHours)*/))
                 } else
                     tableDetails.addView(createRow(CR.string.sensor_age_label, resources.getString(CR.string.sensor_age_value).format(days, hours)))
 
