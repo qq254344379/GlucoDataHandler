@@ -11,7 +11,7 @@ import de.michelinside.glucodatahandler.common.utils.Log
  * Requests a refresh of the [GlucoseDetailsTileService] whenever new data arrives.
  */
 object GlucoseDetailsTileUpdater : NotifierInterface {
-    private const val LOG_ID = "GDH.GlucoseDetailsTileUpdater"
+    private const val LOG_ID = "GDH.tile.details.updater"
 
     var updateCount = 0
         private set

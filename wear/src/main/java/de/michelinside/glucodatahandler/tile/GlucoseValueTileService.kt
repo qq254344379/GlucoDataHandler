@@ -23,28 +23,20 @@ import de.michelinside.glucodatahandler.common.utils.Log
 /**
  * Wear OS Tile showing just the trend arrow and current glucose value (centered, no graph),
  * with the 5m/15m deltas and last-updated time below - a compact alternative to [GlucoseGraphTileService].
- *
- * The arrow/value bitmaps come from the shared [ValueBitmapHandler] cache, which only redraws
- * them when the underlying data changes rather than on every tile request.
- *
- * Refreshed by [GlucoseValueTileUpdater] whenever new data arrives. Tapping the tile opens
- * [de.michelinside.glucodatahandler.WearActivity]. Images are attached via the request's
- * [ProtoLayoutScope] (see [buildLayout]) - the renderer collects them from the scope itself, so
- * there is no [onTileResourcesRequest] override here.
  */
 class GlucoseValueTileService : TileService() {
 
     companion object {
-        private const val LOG_ID = "GDH.GlucoseValueTileService"
+        private const val LOG_ID = "GDH.tile.value"
         private const val WIDGET_ID = "GDH.GlucoseValueTile"
         // Glucose value and trend arrow are composed side by side (inline) into a single bitmap.
         private const val VALUE_IMAGE_HEIGHT_PX = 180
-        private const val VALUE_TEXT_PX = 200
-        private const val VALUE_ARROW_PX = 180
+        private const val VALUE_TEXT_PX = 180
+        private const val VALUE_ARROW_PX = 150
         private const val VALUE_IMAGE_WIDTH_PX = VALUE_TEXT_PX + VALUE_ARROW_PX
         private const val FRESHNESS_INTERVAL_MS = 60_000L
 
-        private const val TEXT_SIZE = 18f
+        private const val TEXT_SIZE = 20f
 
         private fun registerValue(context: Context) {
             if (!ValueBitmapHandler.isRegistered(WIDGET_ID))
@@ -83,11 +75,6 @@ class GlucoseValueTileService : TileService() {
         }
     }
 
-    // Swiping to the tile doesn't guarantee onTileRequest reruns (the system may just show the last
-    // cached render up to FRESHNESS_INTERVAL_MS old) - force a fresh one now so the value and the
-    // "Updated Xs ago" text reflect the moment the tile actually became visible.
-    // onTileEnterEvent is deprecated in favor of this batched callback - the system may report several
-    // enter/leave events at once, so we only react to the most recent ENTER.
     override fun onRecentInteractionEventsAsync(
         events: MutableList<EventBuilders.TileInteractionEvent>
     ): ListenableFuture<Void> {
@@ -152,7 +139,14 @@ class GlucoseValueTileService : TileService() {
         // Column flow: centered block with value + arrow on top and details below.
         val frame = LayoutElementBuilders.Column.Builder()
             .setWidth(expand())
+            .setHeight(expand())
             .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
+            .addContent(spacer(18f))
+            .addContent(expandSpacer())
+
+        // Middle: Glucose Value (Text) + Arrow (Image)
+        val valueRow = LayoutElementBuilders.Row.Builder()
+            .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
             .addContent(
                 LayoutElementBuilders.Image.Builder(scope)
                     .setImageResource(inlineImage(buildValueBitmap(), VALUE_IMAGE_WIDTH_PX, VALUE_IMAGE_HEIGHT_PX))
@@ -160,13 +154,14 @@ class GlucoseValueTileService : TileService() {
                     .setHeight(dp(80f))
                     .build()
             )
-            .addContent(spacer(12f))
+
+        frame.addContent(valueRow.build())
 
         // details: time + delta row
         frame.addContent(
             LayoutElementBuilders.Row.Builder()
                 .addContent(updatedAgoText(TEXT_SIZE))
-                .addContent(horizontalSpacer(10f))
+                .addContent(horizontalSpacer(12f))
                 .addContent(deltaLine("Δ $delta", TEXT_SIZE))
                 .build()
         )
@@ -178,13 +173,16 @@ class GlucoseValueTileService : TileService() {
                 iobCobRow.addContent(deltaLine(iobText, TEXT_SIZE))
             }
             if (iobText.isNotEmpty() && cobText.isNotEmpty()) {
-                iobCobRow.addContent(horizontalSpacer(10f))
+                iobCobRow.addContent(horizontalSpacer(12f))
             }
             if (cobText.isNotEmpty()) {
                 iobCobRow.addContent(deltaLine(cobText, TEXT_SIZE))
             }
             frame.addContent(iobCobRow.build())
         }
+
+        frame.addContent(expandSpacer())
+        frame.addContent(spacer(18f))
 
         val box = LayoutElementBuilders.Box.Builder()
             .setWidth(expand())

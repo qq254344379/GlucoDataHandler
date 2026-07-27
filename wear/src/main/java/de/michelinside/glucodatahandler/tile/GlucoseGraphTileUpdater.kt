@@ -3,6 +3,8 @@ package de.michelinside.glucodatahandler.tile
 import android.content.Context
 import android.os.Bundle
 import androidx.wear.tiles.TileService
+import de.michelinside.glucodatahandler.common.Constants
+import de.michelinside.glucodatahandler.common.chart.ChartBitmapHandler
 import de.michelinside.glucodatahandler.common.notifier.NotifierInterface
 import de.michelinside.glucodatahandler.common.notifier.NotifySource
 import de.michelinside.glucodatahandler.common.utils.Log
@@ -15,7 +17,7 @@ import de.michelinside.glucodatahandler.common.utils.Log
  * currently added to the carousel is a harmless no-op, so no screen-off bookkeeping is needed here.
  */
 object GlucoseGraphTileUpdater : NotifierInterface {
-    private const val LOG_ID = "GDH.GlucoseGraphTileUpdater"
+    private const val LOG_ID = "GDH.tile.graph.updater"
 
     // Incremented on every update so the tile's resources version always changes and the renderer
     // never serves a stale cached image.
@@ -23,8 +25,6 @@ object GlucoseGraphTileUpdater : NotifierInterface {
         private set
 
     val filter = mutableSetOf(
-        NotifySource.MESSAGECLIENT,
-        NotifySource.BROADCAST,
         NotifySource.SETTINGS,
         NotifySource.OBSOLETE_VALUE,
         NotifySource.TIME_VALUE,
@@ -33,7 +33,12 @@ object GlucoseGraphTileUpdater : NotifierInterface {
 
     override fun OnNotifyData(context: Context, dataSource: NotifySource, extras: Bundle?) {
         try {
+            if (dataSource == NotifySource.GRAPH_CHANGED && extras?.getInt(Constants.GRAPH_ID) != ChartBitmapHandler.chartId) {
+                Log.v(LOG_ID, "Ignore graph changed as it is not for this chart")
+                return
+            }
             updateCount++
+            Log.d(LOG_ID, "Trigger update for source $dataSource - count: $updateCount")
             TileService.getUpdater(context)
                 .requestUpdate(GlucoseGraphTileService::class.java)
         } catch (exc: Exception) {

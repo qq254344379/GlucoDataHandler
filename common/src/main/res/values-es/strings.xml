@@ -1013,4 +1013,14 @@ Puedes gestionar estos permisos en cualquier momento en la configuración de la 
     <string name="accessibility_prominent_disclosure_title">Permiso de accesibilidad</string>
     <string name="accessibility_prominent_disclosure_message">Esta aplicación solicita la API AccessibilityService para mostrar los valores de glucosa en su pantalla Always-On-Display (AOD).\n\nPropósito:\nDetecta el estado de la pantalla de bloqueo para superponer una vista local personalizada con sus datos de glucosa actuales. Esto le permite controlar sus niveles sin activar el dispositivo.\n\nPrivacidad de datos:\nEste servicio se utiliza estrictamente para la superposición visual. NO accede, recopila, almacena ni comparte ningún dato personal, sensible o de salud.\n\nConsentimiento:\nAl tocar \"Aceptar\", acepta activar este servicio y será redirigido a los ajustes de Android. Toque para rechazar.</string>
     <string name="button_accept">Aceptar</string>
+
+    <!-- v2.5 -->
+    <string name="tile_glucose_value">Valor de glucosa</string>
+    <string name="tile_glucose_graph">Gráfico de glucosa</string>
+    <string name="tile_glucose_details">Detalles de glucosa</string>
+    <string name="info_label_eiob_talkback">I.O.B. efectivo</string>
+    <string name="pref_health_send_last_value">Enviar solo el último valor</string>
+    <string name="pref_health_send_last_value_summary">Si está habilitado, solo se envía el valor de glucosa más reciente a Health Connect. De lo contrario, se transmiten todos los valores registrados desde la última sincronización.</string>
+    <string name="new_sensor">Nuevo sensor</string>
+
 </resources>

@@ -15,7 +15,7 @@ import de.michelinside.glucodatahandler.common.utils.Log
  * harmless no-op, so no screen-off bookkeeping is needed here.
  */
 object GlucoseValueTileUpdater : NotifierInterface {
-    private const val LOG_ID = "GDH.GlucoseValueTileUpdater"
+    private const val LOG_ID = "GDH.tile.value.updater"
 
     // Incremented on every update so the tile's resources version always changes and the renderer
     // never serves a stale cached image.

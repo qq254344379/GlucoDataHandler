@@ -1017,4 +1017,20 @@ GlucoDataHandler само записва данни за кръвната зах
     <string name="accessibility_prominent_disclosure_title">Разрешение за достъпност</string>
     <string name="accessibility_prominent_disclosure_message">Това приложение изисква AccessibilityService API, за да показва стойностите на глюкозата на вашия Always-On-Display (AOD).\n\nЦел:\nТо открива състоянието на заключения екран, за да покаже персонализиран локален изглед с текущите ви данни за глюкозата. Това ви позволява да следите нивата си, без да събуждате устройството.\n\nПоверителност на данните:\nТази услуга се използва строго за визуалния изглед. Тя НЕ осъществява достъп, не събира, не съхранява и не споделя лични, чувствителни или здравни данни.\n\nСъгласие:\nКато докоснете \"Приемам\", вие се съгласявате да активирате тази услуга и ще бъдете пренасочени към настройките на Android. Докоснете за отказ.</string>
     <string name="button_accept">Приемам</string>
+
+    <!-- v2.5 -->
+    <string name="unit_second_short">с</string>
+    <string name="unit_minute_short">мин</string>
+    <plurals name="minutes_short">
+        <item quantity="one">%d мин</item>
+        <item quantity="other">%d мин</item>
+    </plurals>
+    <string name="tile_glucose_value">Стойност на глюкозата</string>
+    <string name="tile_glucose_graph">Графика на глюкозата</string>
+    <string name="tile_glucose_details">Подробности за глюкозата</string>
+    <string name="info_label_eiob_talkback">ефективен I.O.B.</string>
+    <string name="pref_health_send_last_value">Изпращане само на последната стойност</string>
+    <string name="pref_health_send_last_value_summary">Ако е активирано, към Health Connect се изпраща само най-новата стойност на глюкозата. В противен случай се предават всички записани стойности от последната синхронизация.</string>
+    <string name="new_sensor">Нов сензор</string>
+
 </resources>

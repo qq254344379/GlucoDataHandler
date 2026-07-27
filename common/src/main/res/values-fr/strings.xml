@@ -1014,4 +1014,14 @@ Vous pouvez gérer ces autorisations à tout moment dans les paramètres de l\'a
     <string name="accessibility_prominent_disclosure_title">Autorisation d\'accessibilité</string>
     <string name="accessibility_prominent_disclosure_message">Cette application requiert l\'API AccessibilityService pour afficher les valeurs de glucose sur votre écran Always-On-Display (AOD).\n\nObjectif :\nElle détecte l\'état de l\'écran de verrouillage pour superposer une vue locale personnalisée avec vos données de glucose actuelles. Cela vous permet de surveiller vos niveaux sans réveiller l\'appareil.\n\nConfidentialité des données :\nCe service est strictement utilisé pour la superposition visuelle. Il n\'accède à aucune donnée personnelle, sensible ou de santé, et ne les collecte, ne les stocke et ne les partage pas.\n\nConsentement :\nEn appuyant sur \"Accepter\", vous acceptez d\'activer ce service et serez redirigé vers les paramètres d\'Android. Appuyez pour refuser.</string>
     <string name="button_accept">Accepter</string>
+
+    <!-- v2.5 -->
+    <string name="tile_glucose_value">Valeur de glycémie</string>
+    <string name="tile_glucose_graph">Graphique de glycémie</string>
+    <string name="tile_glucose_details">Détails de glycémie</string>
+    <string name="info_label_eiob_talkback">I.O.B. effectif</string>
+    <string name="pref_health_send_last_value">Envoyer uniquement la dernière valeur</string>
+    <string name="pref_health_send_last_value_summary">Si cette option est activée, seule la valeur de glycémie la plus récente est envoyée à Health Connect. Sinon, toutes les valeurs enregistrées depuis la dernière synchronisation sont transmises.</string>
+    <string name="new_sensor">Nouveau capteur</string>
+
 </resources>

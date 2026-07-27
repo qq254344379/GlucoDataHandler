@@ -3,10 +3,8 @@ package de.michelinside.glucodatahandler.tile
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.wear.protolayout.ActionBuilders
-import androidx.wear.protolayout.ColorBuilders.argb
 import androidx.wear.protolayout.DimensionBuilders.dp
 import androidx.wear.protolayout.DimensionBuilders.expand
-import androidx.wear.protolayout.DimensionBuilders.sp
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.ModifiersBuilders
 import androidx.wear.protolayout.ProtoLayoutScope
@@ -31,9 +29,12 @@ import java.time.Duration
 class GlucoseDetailsTileService : TileService() {
 
     companion object {
-        private const val LOG_ID = "GDH.GlucoseDetailsTileService"
+        private const val LOG_ID = "GDH.tile.details"
         private const val WIDGET_ID = "GDH.GlucoseDetailsTile"
-        private const val VALUE_ARROW_PX = 150
+        private const val VALUE_IMAGE_HEIGHT_PX = 100
+        private const val VALUE_TEXT_PX = 100
+        private const val VALUE_ARROW_PX = 80
+        private const val VALUE_IMAGE_WIDTH_PX = VALUE_TEXT_PX + VALUE_ARROW_PX
         private const val FRESHNESS_INTERVAL_MS = 60_000L
 
         private fun registerValue(context: Context) {
@@ -46,9 +47,6 @@ class GlucoseDetailsTileService : TileService() {
                 ValueBitmapHandler.unregister(context, WIDGET_ID)
         }
     }
-
-    private fun buildArrowBitmap(): Bitmap =
-        ValueBitmapHandler.getArrowBitmap(VALUE_ARROW_PX, VALUE_ARROW_PX)
 
     override fun onCreate() {
         try {
@@ -140,7 +138,7 @@ class GlucoseDetailsTileService : TileService() {
         // Top section: Optional items (Sensor Age, Other Unit)
         val sensorAge = if (ReceiveData.sensorStartTime > 0) {
             val duration = Duration.ofMillis(System.currentTimeMillis() - ReceiveData.sensorStartTime)
-            getString(CR.string.tile_sensor_age, formatSensorAge(duration))
+            resources.getString(CR.string.sensor_age_label) + ": " + formatSensorAge(duration)
         } else ""
 
         val otherUnit = if (GlucoDataService.sharedPref?.getBoolean(de.michelinside.glucodatahandler.common.Constants.SHARED_PREF_SHOW_OTHER_UNIT, false) == true) {
@@ -149,42 +147,28 @@ class GlucoseDetailsTileService : TileService() {
 
         if (sensorAge.isNotEmpty() || otherUnit.isNotEmpty()) {
             if (sensorAge.isNotEmpty()) {
-                frame.addContent(deltaLine(sensorAge, 12f))
+                frame.addContent(deltaLine(sensorAge, 14f))
             }
             if (otherUnit.isNotEmpty()) {
-                frame.addContent(deltaLine(otherUnit, 14f))
+                frame.addContent(deltaLine(otherUnit, 16f))
             }
-            frame.addContent(spacer(8f))
         }
 
         // Middle: Glucose Value (Text) + Arrow (Image)
         val valueRow = LayoutElementBuilders.Row.Builder()
             .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
             .addContent(
-                LayoutElementBuilders.Text.Builder()
-                    .setText(ReceiveData.getGlucoseAsString())
-                    .setFontStyle(
-                        LayoutElementBuilders.FontStyle.Builder()
-                            .setSize(sp(38f))
-                            .setColor(argb(ReceiveData.getGlucoseColor()))
-                            .setWeight(LayoutElementBuilders.FONT_WEIGHT_BOLD)
-                            .setItalic(ReceiveData.isObsoleteShort() && !ReceiveData.isObsoleteLong())
-                            .build()
-                    )
-                    .build()
-            )
-            .addContent(horizontalSpacer(6f))
-            .addContent(
                 LayoutElementBuilders.Image.Builder(scope)
-                    .setImageResource(inlineImage(buildArrowBitmap(), VALUE_ARROW_PX, VALUE_ARROW_PX))
-                    .setWidth(dp(48f))
-                    .setHeight(dp(48f))
+                    .setImageResource(inlineImage(buildValueBitmap(),
+                        VALUE_IMAGE_WIDTH_PX,
+                        VALUE_IMAGE_HEIGHT_PX
+                    ))
+                    .setWidth(dp(80f * (VALUE_IMAGE_WIDTH_PX.toFloat() / VALUE_IMAGE_HEIGHT_PX.toFloat())))
+                    .setHeight(dp(50f))
                     .build()
             )
 
         frame.addContent(valueRow.build())
-
-        frame.addContent(spacer(8f))
 
         val delta1 = deltaStr(ReceiveData.delta1Min)
         val delta5 = deltaStr(ReceiveData.delta5Min)
@@ -220,16 +204,16 @@ class GlucoseDetailsTileService : TileService() {
     }
 
     private fun createDeltaRow(minutes: Int, delta: String): LayoutElementBuilders.LayoutElement {
-        val label = "Δ " + resources.getQuantityString(CR.plurals.minutes_long, minutes, minutes)
+        val label = "Δ " + resources.getQuantityString(CR.plurals.minutes_short, minutes, minutes)
         return LayoutElementBuilders.Row.Builder()
             .addContent(
                 LayoutElementBuilders.Box.Builder()
                     .setWidth(dp(90f))
                     .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_START)
-                    .addContent(deltaLine(label, 14f))
+                    .addContent(deltaLine(label, 16f))
                     .build()
             )
-            .addContent(deltaLine(delta, 14f))
+            .addContent(deltaLine(delta, 16f))
             .build()
     }
 
@@ -238,4 +222,13 @@ class GlucoseDetailsTileService : TileService() {
         val hours = duration.toHours() % 24
         return if (days > 0) "${days}d ${hours}h" else "${hours}h"
     }
+
+    // Value text and trend arrow drawn side by side (inline) rather than stacked. The composited
+    // combo bitmap is cached in ValueBitmapHandler itself, so this is just a cache read once the
+    // underlying value/arrow bitmaps haven't changed.
+    private fun buildValueBitmap(): Bitmap =
+        ValueBitmapHandler.getComboBitmap(VALUE_TEXT_PX, VALUE_IMAGE_HEIGHT_PX,
+            VALUE_ARROW_PX,
+            VALUE_ARROW_PX
+        )
 }

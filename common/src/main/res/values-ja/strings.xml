@@ -995,4 +995,18 @@ GlucoDataHandlerは、Health Connectに血糖データのみを書き込み、�
     <string name="accessibility_prominent_disclosure_title">ユーザー補助の権限</string>
     <string name="accessibility_prominent_disclosure_message">このアプリは、常に画面表示（AOD）に血糖値を表示するために AccessibilityService API をリクエストします。\n\n目的：\n端末がロック画面またはAODモードであることを検出し、現在の血糖値データをカスタムローカルビューで重ねて表示します。これにより、端末をスリープ解除することなく数値を 確認できます。\n\nデータのプライバシー：\nこのサービスは、視覚的なオーバーレイ表示のみに厳格に使用されます。個人情報、機密情報、または健康データへのアクセス、収集、保存、共有は一切行いません。\n\n同意：\n\"同意する\" をタップすると、このサービスの有効化に同意したことになり、Androidの設定画面にリダイレクトされます。拒否する場合はキャンセルをタップしてください。</string>
     <string name="button_accept">同意する</string>
+
+    <!-- v2.5 -->
+    <string name="unit_second_short">秒</string>
+    <string name="unit_minute_short">分</string>
+    <plurals name="minutes_short">
+        <item quantity="other">%d 分</item>
+    </plurals>
+    <string name="tile_glucose_value">血糖値</string>
+    <string name="tile_glucose_graph">血糖グラフ</string>
+    <string name="tile_glucose_details">血糖詳細</string>
+    <string name="info_label_eiob_talkback">有効 I.O.B.</string>
+    <string name="pref_health_send_last_value">最新の値のみ送信</string>
+    <string name="pref_health_send_last_value_summary">有効にすると、最新の血糖値のみをヘルスコネクトに送信します。無効にすると、前回の同期以降に記録されたすべての値が送信されます。</string>
+    <string name="new_sensor">新しいセンサー</string>
 </resources>

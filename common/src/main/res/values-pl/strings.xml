@@ -1020,4 +1020,13 @@
     <string name="accessibility_prominent_disclosure_title">Uprawnienia dostępności</string>
     <string name="accessibility_prominent_disclosure_message">Ta aplikacja wymaga interfejsu AccessibilityService API do wyświetlania wartości glukozy na ekranie Always-On-Display (AOD).\n\nCel:\nWykrywa stan ekranu blokady, aby nałożyć niestandardowy lokalny widok z bieżącymi danymi dotyczącymi glukozy. Pozwala to na monitorowanie poziomów bez wybudzania urządzenia.\n\nPrywatność danych:\nTa usługa jest używana wyłącznie do nakładania widoku. NIE uzyskuje dostępu, nie zbiera, nie przechowuje ani nie udostępnia żadnych danych osobowych, wrażliwych ani medycznych.\n\nZgoda:\nDotykając \"Akceptuj\", wyrażasz zgodę na włączenie tej usługi i zostaniesz przekierowany do ustawień systemu Android. Dotknij, aby odrzucić.</string>
     <string name="button_accept">Akceptuj</string>
+
+    <!-- v2.5 -->
+    <string name="tile_glucose_value">Glucose value</string>
+    <string name="tile_glucose_graph">Glucose graph</string>
+    <string name="tile_glucose_details">Glucose details</string>
+    <string name="info_label_eiob_talkback">effective I.O.B.</string>
+    <string name="pref_health_send_last_value">Send only last value</string>
+    <string name="pref_health_send_last_value_summary">If enabled, only the most recent glucose value is sent to Health Connect. Otherwise, all recorded values since the last synchronization are transmitted.</string>
+    <string name="new_sensor">New Sensor</string>
 </resources>

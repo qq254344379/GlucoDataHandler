@@ -1086,11 +1086,15 @@ You can manage these permissions at any time in the Health Connect app settings.
     <string name="button_accept">Accept</string>
 
     <!-- v2.5 -->
-
+    <string name="unit_second_short" translatable="false">s</string>
+    <string name="unit_minute_short" translatable="false">min</string>
+    <plurals name="minutes_short" translatable="false">
+        <item quantity="one">%d min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
     <string name="tile_glucose_value">Glucose value</string>
     <string name="tile_glucose_graph">Glucose graph</string>
     <string name="tile_glucose_details">Glucose details</string>
-    <string name="tile_sensor_age">Sensor age: %1$s</string>
     <string name="info_label_eiob_talkback">effective I.O.B.</string>
     <string name="pref_health_send_last_value">Send only last value</string>
     <string name="pref_health_send_last_value_summary">If enabled, only the most recent glucose value is sent to Health Connect. Otherwise, all recorded values since the last synchronization are transmitted.</string>

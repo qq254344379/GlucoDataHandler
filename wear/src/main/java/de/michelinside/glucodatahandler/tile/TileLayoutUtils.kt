@@ -10,9 +10,11 @@ import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.TypeBuilders
 import androidx.wear.protolayout.expression.DynamicBuilders.DynamicInstant
 import androidx.wear.protolayout.expression.DynamicBuilders.DynamicString
+import androidx.wear.tiles.TileService
 import com.google.common.util.concurrent.ListenableFuture
 import de.michelinside.glucodatahandler.common.ReceiveData
 import de.michelinside.glucodatahandler.common.utils.GlucoDataUtils
+import de.michelinside.glucodatahandler.common.R as CR
 import java.time.Instant
 
 // Shared protolayout building blocks for the wear tiles (GlucoseValueTileService, GlucoseGraphTileService).
@@ -47,6 +49,7 @@ internal fun deltaLine(text: String, sizeSp: Float = 14f): LayoutElementBuilders
                 .setColor(argb(Color.LTGRAY))
                 .build()
         )
+        .setMultilineAlignment(LayoutElementBuilders.TEXT_ALIGN_CENTER)
         .build()
 
 internal fun deltaStr(value: Float): String =
@@ -70,7 +73,7 @@ private fun updatedAgoFontStyle(sizeSp: Float): LayoutElementBuilders.FontStyle 
 // "🕒 X min", bound to a ProtoLayout dynamic expression so the tile renderer keeps ticking
 // it up off the platform clock by itself - no onTileRequest call, no app wake-up needed. Renderers
 // that don't support dynamic values fall back to the static text computed at render time.
-internal fun updatedAgoText(sizeSp: Float = 14f): LayoutElementBuilders.Text {
+internal fun TileService.updatedAgoText(sizeSp: Float = 14f): LayoutElementBuilders.Text {
     if (ReceiveData.time == 0L) {
         return LayoutElementBuilders.Text.Builder()
             .setText("🕒 --")
@@ -81,22 +84,23 @@ internal fun updatedAgoText(sizeSp: Float = 14f): LayoutElementBuilders.Text {
         .durationUntil(DynamicInstant.platformTimeWithSecondsPrecision())
     val secondsText = DynamicString.constant("🕒 ")
         .concat(elapsed.toIntSeconds().format())
-        .concat(DynamicString.constant(" s"))
+        .concat(DynamicString.constant(" " + getString(CR.string.unit_second_short)))
     val minutesText = DynamicString.constant("🕒 ")
         .concat(elapsed.toIntMinutes().format())
-        .concat(DynamicString.constant(" min"))
+        .concat(DynamicString.constant(" " + getString(CR.string.unit_minute_short)))
     val liveText = DynamicString.onCondition(elapsed.toIntSeconds().lt(60))
         .use(secondsText)
         .elseUse(minutesText)
-    val textProp = TypeBuilders.StringProp.Builder("🕒 " + ((System.currentTimeMillis() - ReceiveData.time) / 60000) + " min")
+    val textProp = TypeBuilders.StringProp.Builder("🕒 " + ((System.currentTimeMillis() - ReceiveData.time) / 60000) + getString(CR.string.unit_minute_short))
         .setDynamicValue(liveText)
         .build()
     return LayoutElementBuilders.Text.Builder()
         .setText(textProp)
         .setLayoutConstraintsForDynamicText(
             // Only used to size the text box (widest realistic value); never displayed.
-            TypeBuilders.StringLayoutConstraint.Builder("🕒 59 min").build()
+            TypeBuilders.StringLayoutConstraint.Builder("🕒 59 " + getString(CR.string.unit_minute_short)).build()
         )
         .setFontStyle(updatedAgoFontStyle(sizeSp))
+        .setMultilineAlignment(LayoutElementBuilders.TEXT_ALIGN_CENTER)
         .build()
 }
