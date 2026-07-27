@@ -249,7 +249,7 @@ object HealthConnectManager: NotifierInterface {
                         model = "App",
                         type = Device.TYPE_PHONE
                     )
-                    val currentMeta = Metadata.Companion.autoRecorded(device = deviceInfo)
+                    val currentMeta = Metadata.Companion.unknownRecordingMethod(device = deviceInfo)
                     val recordsToInsert = mutableListOf<BloodGlucoseRecord>()
 
                     glucoseValues.forEach {
