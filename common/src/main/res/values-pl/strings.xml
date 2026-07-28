@@ -1026,7 +1026,7 @@
     <string name="tile_glucose_graph">Wykres glukozy</string>
     <string name="tile_glucose_details">Szczegóły glukozy</string>
     <string name="info_label_eiob_talkback">Aktualna wartość I.O.B.</string>
-    <string name="pref_health_send_last_value">Wyślij tylko ostatnią wartość</string>
+    <string name="pref_health_send_last_value">Wyślij tylko ostatnią</string>
     <string name="pref_health_send_last_value_summary">Jeśli opcja zostanie włączona, do Health Connect wysyłana będzie tylko ostatnia dostępna wartość. W przeciwnym razie przesyłane będą wszystkie wartości zarejestrowane od ostatniej synchronizacji.</string>
     <string name="new_sensor">Nowy sensor</string>
 </resources>
