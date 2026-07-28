@@ -1029,7 +1029,7 @@ GlucoDataHandler само записва данни за кръвната зах
     <string name="tile_glucose_graph">Графика на глюкозата</string>
     <string name="tile_glucose_details">Подробности за глюкозата</string>
     <string name="info_label_eiob_talkback">ефективен I.O.B.</string>
-    <string name="pref_health_send_last_value">Изпращане само на последната стойност</string>
+    <string name="pref_health_send_last_value">Само последната стойност</string>
     <string name="pref_health_send_last_value_summary">Ако е активирано, към Health Connect се изпраща само най-новата стойност на глюкозата. В противен случай се предават всички записани стойности от последната синхронизация.</string>
     <string name="new_sensor">Нов сензор</string>
 
