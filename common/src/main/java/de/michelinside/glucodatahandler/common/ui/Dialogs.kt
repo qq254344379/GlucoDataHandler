@@ -10,10 +10,14 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import de.michelinside.glucodatahandler.common.Constants
 import de.michelinside.glucodatahandler.common.R
+import de.michelinside.glucodatahandler.common.utils.Log
+import de.michelinside.glucodatahandler.common.utils.Utils
 import java.util.Calendar
 
 
 object Dialogs {
+
+    const val LOG_ID = "GDH.Dialogs"
     fun showOkDialog(context: Context, titleResId: Int, messageResId: Int, okListener: DialogInterface.OnClickListener?) {
         MaterialAlertDialogBuilder(context)
             .setTitle(context.resources.getString(titleResId))
@@ -75,38 +79,44 @@ object Dialogs {
         initialTime: Long,
         onDateTimeSelected: (Long) -> Unit
     ) {
-        val calendar = Calendar.getInstance()
-        if (initialTime > 0)
-            calendar.timeInMillis = initialTime
+        try {
+            Log.d(LOG_ID, "showDateTimePicker called with inital $initialTime")
+            val calendar = Calendar.getInstance()
+            if (initialTime > 0)
+                calendar.timeInMillis = initialTime
 
-        val datePickerDialog = DatePickerDialog(
-            context,
-            { _, year, month, dayOfMonth ->
-                val timePickerDialog = TimePickerDialog(
-                    context,
-                    { _, hourOfDay, minute ->
-                        val resultCalendar = Calendar.getInstance()
-                        resultCalendar.set(Calendar.YEAR, year)
-                        resultCalendar.set(Calendar.MONTH, month)
-                        resultCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                        resultCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                        resultCalendar.set(Calendar.MINUTE, minute)
-                        resultCalendar.set(Calendar.SECOND, 0)
-                        resultCalendar.set(Calendar.MILLISECOND, 0)
-
-                        onDateTimeSelected(resultCalendar.timeInMillis)
-                    },
-                    calendar.get(Calendar.HOUR_OF_DAY),
-                    calendar.get(Calendar.MINUTE),
-                    true // 24h format
-                )
-                timePickerDialog.show()
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        datePickerDialog.show()
+            val datePickerDialog = DatePickerDialog(
+                context,
+                { _, year, month, dayOfMonth ->
+                    Log.d(LOG_ID, "Selected date: $dayOfMonth.$month.$year")
+                    val timePickerDialog = TimePickerDialog(
+                        context,
+                        { _, hourOfDay, minute ->
+                            val resultCalendar = Calendar.getInstance()
+                            resultCalendar.set(Calendar.YEAR, year)
+                            resultCalendar.set(Calendar.MONTH, month)
+                            resultCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                            resultCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                            resultCalendar.set(Calendar.MINUTE, minute)
+                            resultCalendar.set(Calendar.SECOND, 0)
+                            resultCalendar.set(Calendar.MILLISECOND, 0)
+                            Log.d(LOG_ID, "Selected time to ${Utils.getUiTimeStamp(resultCalendar.timeInMillis)}")
+                            onDateTimeSelected(resultCalendar.timeInMillis)
+                        },
+                        calendar.get(Calendar.HOUR_OF_DAY),
+                        calendar.get(Calendar.MINUTE),
+                        true // 24h format
+                    )
+                    timePickerDialog.show()
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
+            datePickerDialog.show()
+        } catch (e: Exception) {
+            Log.e(LOG_ID, "Error showing date/time picker: ${e.message}")
+        }
     }
 
     fun updateColorScheme(context: Context) {

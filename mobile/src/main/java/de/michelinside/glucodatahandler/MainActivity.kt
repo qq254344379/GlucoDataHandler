@@ -502,7 +502,7 @@ class MainActivity : AppCompatActivity(), NotifierInterface {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         try {
-            Log.v(LOG_ID, "onOptionsItemSelected for " + item.itemId.toString())
+            Log.d(LOG_ID, "onOptionsItemSelected for " + item.itemId.toString())
             when(item.itemId) {
                 R.id.action_settings -> {
                     val intent = Intent(this, SettingsActivity::class.java)
@@ -523,8 +523,11 @@ class MainActivity : AppCompatActivity(), NotifierInterface {
                     return true
                 }
                 R.id.action_new_sensor -> {
-                    Dialogs.showDateTimePicker(this, ReceiveData.sensorStartTime) { selectedTime ->
+                    Log.d(LOG_ID, "New sensor action")
+                    val startTime = if(Utils.getElapsedTimeMinute(ReceiveData.sensorStartTime) < (60*24*10) ) ReceiveData.sensorStartTime else System.currentTimeMillis()
+                    Dialogs.showDateTimePicker(this, startTime) { selectedTime ->
                         val sensorId = if(ReceiveData.sensorID.isNullOrEmpty()) Constants.GDH_MANUAL_SENSOR_ID else ReceiveData.sensorID
+                        Log.d(LOG_ID, "Set sensor start time for $sensorId to ${Utils.getUiTimeStamp(selectedTime)}")
                         ReceiveData.setSensorStartTime(sensorId, selectedTime, true)
                         updateDetailsTable()
                     }
@@ -1053,6 +1056,7 @@ class MainActivity : AppCompatActivity(), NotifierInterface {
                 else
                     tableDetails.addView(createRow(CR.string.info_label_sensor_id, if(BuildConfig.DEBUG) "ABCDE12345" else ReceiveData.sensorID!!))
             }
+            Log.d(LOG_ID, "Current sensor ${ReceiveData.sensorID} - start-time: ${Utils.getUiTimeStamp(ReceiveData.sensorStartTime)}")
             if(ReceiveData.sensorStartTime > 0) {
                 val duration = Duration.ofMillis(System.currentTimeMillis() - ReceiveData.sensorStartTime)
                 val days = duration.toDays()

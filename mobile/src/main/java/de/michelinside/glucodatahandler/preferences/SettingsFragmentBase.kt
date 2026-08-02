@@ -293,11 +293,8 @@ class GeneralSettingsFragment: SettingsFragmentBase(R.xml.pref_general) {
         Log.v(LOG_ID, "initPreferences called")
         super.initPreferences()
         val prefSensorRuntime = findPreference<EditTextPreference>(Constants.SHARED_PREF_SENSOR_RUNTIME)
-        if(prefSensorRuntime != null) {
-            prefSensorRuntime.isVisible = ReceiveData.sensorStartTime > 0
-            prefSensorRuntime.setOnBindEditTextListener {
-                it.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-            }
+        prefSensorRuntime?.setOnBindEditTextListener {
+            it.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         }
     }
 

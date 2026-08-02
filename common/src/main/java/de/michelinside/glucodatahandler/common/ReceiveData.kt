@@ -38,6 +38,7 @@ object ReceiveData: SharedPreferences.OnSharedPreferenceChangeListener {
     const val COB = "glucodata.Minute.COB"
     const val IOBCOB_TIME = "gdh.IOB_COB_time"
     const val SENSOR_START_TIME = "gdh.sensor_start_time"
+    const val SENSOR_ID = "gdh.sensor_id"   // used for start time, otherwise the serial is used
     const val DELTA_FALLING_COUNT = "gdh.delta_falling_count"
     const val DELTA_RISING_COUNT = "gdh.delta_rising_count"
 
@@ -51,7 +52,7 @@ object ReceiveData: SharedPreferences.OnSharedPreferenceChangeListener {
     var sensorID: String? = null
     private var startTimePair = Pair("", 0L)
     val sensorStartTime: Long get() {
-        if(!sensorID.isNullOrEmpty() && startTimePair.first == sensorID)
+        if(startTimePair.first == Constants.GDH_MANUAL_SENSOR_ID || (!sensorID.isNullOrEmpty() && startTimePair.first == sensorID))
             return startTimePair.second
         return 0L
     }
@@ -666,8 +667,13 @@ object ReceiveData: SharedPreferences.OnSharedPreferenceChangeListener {
                     receiveTime = System.currentTimeMillis()
                     source = dataSource
                     sensorID = GlucoDataUtils.checkSerial(extras.getString(SERIAL)) //Name of sensor
-                    if(extras.containsKey(SENSOR_START_TIME))
-                        setSensorStartTime(sensorID, extras.getLong(SENSOR_START_TIME))
+                    if(extras.containsKey(SENSOR_START_TIME)) {
+                        if(sensorID.isNullOrEmpty() && extras.containsKey(SENSOR_ID)) {
+                            setSensorStartTime(extras.getString(SENSOR_ID), extras.getLong(SENSOR_START_TIME))
+                        } else {
+                            setSensorStartTime(sensorID, extras.getLong(SENSOR_START_TIME))
+                        }
+                    }
 
                     sourceRate = extras.getFloat(RATE) //Rate of change of glucose. See libre and dexcom label functions
 
@@ -950,6 +956,7 @@ object ReceiveData: SharedPreferences.OnSharedPreferenceChangeListener {
         extras.putInt(MGDL, rawValue)
         extras.putString(SERIAL, sensorID)
         extras.putLong(SENSOR_START_TIME, sensorStartTime)
+        extras.putString(SENSOR_ID, startTimePair.first)
         extras.putFloat(RATE, rate)
         extras.putInt(ALARM, alarm)
         extras.putFloat(DELTA, deltaValue)
@@ -1001,6 +1008,7 @@ object ReceiveData: SharedPreferences.OnSharedPreferenceChangeListener {
                 putInt(MGDL, rawValue)
                 putString(SERIAL, sensorID)
                 putLong(SENSOR_START_TIME, sensorStartTime)
+                putString(SENSOR_ID, startTimePair.first)
                 putFloat(RATE, rate)
                 putInt(ALARM, alarm)
                 putFloat(DELTA, deltaValue)
@@ -1034,6 +1042,7 @@ object ReceiveData: SharedPreferences.OnSharedPreferenceChangeListener {
                     extras.putInt(MGDL, sharedGlucosePref.getInt(MGDL, rawValue))
                     extras.putString(SERIAL, sharedGlucosePref.getString(SERIAL, sensorID))
                     extras.putLong(SENSOR_START_TIME, sharedGlucosePref.getLong(SENSOR_START_TIME, 0L))
+                    extras.putString(SENSOR_ID, sharedGlucosePref.getString(SENSOR_ID, null))
                     extras.putFloat(RATE, sharedGlucosePref.getFloat(RATE, rate))
                     extras.putInt(ALARM, sharedGlucosePref.getInt(ALARM, alarm))
                     extras.putFloat(DELTA, sharedGlucosePref.getFloat(DELTA, deltaValue))
@@ -1089,10 +1098,14 @@ object ReceiveData: SharedPreferences.OnSharedPreferenceChangeListener {
     }
 
     fun setSensorStartTime(serialId: String?, startTime: Long, checkStartTime: Boolean = false) {
+        Log.d(LOG_ID, "set sensor start time $startTime for serial $serialId - current: ${startTimePair.second} for ${startTimePair.first}")
         if(!serialId.isNullOrEmpty() && startTime > 0 && (startTimePair.first != serialId || (checkStartTime && startTimePair.second != startTime))) {
             val serial = GlucoDataUtils.checkSerial(serialId)!!
             Log.i(LOG_ID, "setSensorStartTime for " + serial + ": " + Utils.getUiTimeStamp(startTime))
             startTimePair = Pair(serial, startTime)
+            if(checkStartTime && GlucoDataService.context != null) {
+                saveExtras(GlucoDataService.context!!)
+            }
         }
     }
 
