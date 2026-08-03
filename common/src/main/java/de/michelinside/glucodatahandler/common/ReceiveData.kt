@@ -266,7 +266,8 @@ object ReceiveData: SharedPreferences.OnSharedPreferenceChangeListener {
 
     fun getDbValue(): Int {
         if(isMmol) {
-            return GlucoDataUtils.mmolToMg(glucose).toInt()
+            if(GlucoDataUtils.mgToMmol(rawValue.toFloat()) != glucose)  // if the raw value is not equal to the calculated mmol value, then use the mmol value for db storage
+                return GlucoDataUtils.mmolToMg(glucose).toInt()
         }
         return rawValue
     }
