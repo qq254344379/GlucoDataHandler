@@ -1014,4 +1014,7 @@ Puoi gestire queste autorizzazioni in qualsiasi momento nelle impostazioni dell\
     <string name="pref_health_send_last_value">Invia solo l\'ultimo valore</string>
     <string name="pref_health_send_last_value_summary">Se abilitato, solo il valore glicemico più recente viene inviato a Health Connect. In caso contrario, vengono trasmessi tutti i valori registrati dall\'ultima sincronizzazione.</string>
     <string name="new_sensor">Nuovo sensore</string>
+    <string name="aod_advanced_protection_enabled_dialog">L\'AOD non può essere utilizzato mentre la Protezione avanzata è attiva.\nL\'impostazione è stata disattivata e può essere riattivata nel menu delle impostazioni solo dopo aver disattivato la Protezione avanzata.</string>
+    <string name="aod_advanced_protection_enabled_info">La Protezione avanzata è attiva e blocca i servizi di accessibilità per questa app. Per utilizzare l\'AOD, disattiva la Protezione avanzata nelle impostazioni di Android.</string>
+    <string name="press_here_to_check">Premi qui per verificare.</string>
 </resources>

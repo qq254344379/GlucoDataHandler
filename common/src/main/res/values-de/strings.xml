@@ -1018,5 +1018,7 @@ Sie können diese Berechtigungen jederzeit in den Health Connect App-Einstellung
     <string name="pref_health_send_last_value">Nur letzten Wert senden</string>
     <string name="pref_health_send_last_value_summary">Wenn aktiviert, wird nur der aktuellste Glukosewert an Health Connect gesendet. Andernfalls werden alle seit der letzten Synchronisierung aufgezeichneten Werte übertragen.</string>
     <string name="new_sensor">Neuer Sensor</string>
-
+    <string name="aod_advanced_protection_enabled_dialog">AOD kann nicht genutzt werden, da die Erweiterte Sicherheit aktiviert ist.\nDie Einstellung wurde deaktiviert und kann erst wieder im Einstellungsmenü aktiviert werden, wenn die Erweiterte Sicherheit deaktiviert wurde.</string>
+    <string name="aod_advanced_protection_enabled_info">Die \"Erweiterte Sicherheit\" ist aktiv und blockiert die AOD-Anzeige. Bitte deaktivieren Sie ihn in den Android-Einstellungen, um diese Funktion nutzen zu können.</string>
+    <string name="press_here_to_check">Hier drücken, um dies zu prüfen.</string>
 </resources>

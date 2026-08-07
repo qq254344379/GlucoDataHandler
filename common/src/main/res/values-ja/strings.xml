@@ -1009,4 +1009,7 @@ GlucoDataHandlerは、Health Connectに血糖データのみを書き込み、�
     <string name="pref_health_send_last_value">最新の値のみ送信</string>
     <string name="pref_health_send_last_value_summary">有効にすると、最新の血糖値のみをヘルスコネクトに送信します。無効にすると、前回の同期以降に記録されたすべての値が送信されます。</string>
     <string name="new_sensor">新しいセンサー</string>
+    <string name="aod_advanced_protection_enabled_dialog">高度な保護機能が有効な間は、AODを使用できません。\nこの設定は無効化されました。高度な保護機能を無効にした後、設定メニューで再度有効にできます。</string>
+    <string name="aod_advanced_protection_enabled_info">高度な保護機能が有効になっており、このアプリのユーザー補助サービスをブロックしています。AODを使用するには、Androidの設定で高度な保護機能を無効にしてください。</string>
+    <string name="press_here_to_check">ここをタップして確認してください。</string>
 </resources>

@@ -1023,5 +1023,8 @@ GlucoDataHandler 只會將血糖數據寫入健康連結，除非您明確授予
     <string name="pref_health_send_last_value">僅傳送最後數值</string>
     <string name="pref_health_send_last_value_summary">如果啟用，則僅將最新的血糖值傳送到「健康連結」。否則，將傳送自上次同步以來記錄的所有數值。</string>
     <string name="new_sensor">新感測器</string>
+    <string name="aod_advanced_protection_enabled_dialog">當已啟用進階防護時無法使用 AOD。\n此設定已停用，且只有在停用進階防護後，才能在設定中重新啟用。</string>
+    <string name="aod_advanced_protection_enabled_info">進階防護已啟用，並封鎖此程式的協助工具服務。若要使用 AOD，請在 Android 設定中停用進階防護。</string>
+    <string name="press_here_to_check">按這裡進行檢查。</string>
 
 </resources>

@@ -1039,5 +1039,7 @@ GlucoDataHandler только записывает данные об уровн�
     <string name="pref_health_send_last_value">Отправлять только последнее значение</string>
     <string name="pref_health_send_last_value_summary">Если включено, в Health Connect будет отправлено только самое последнее значение глюкозы. В противном случае передаются все значения, записанные с момента последней синхронизации.</string>
     <string name="new_sensor">Новый датчик</string>
-
+    <string name="aod_advanced_protection_enabled_dialog">AOD нельзя использовать, пока включена Дополнительная защита.\nНастройка была отключена и может быть снова включена в меню настроек только после деактивации Дополнительной защиты.</string>
+    <string name="aod_advanced_protection_enabled_info">Дополнительная защита активна и блокирует специальные возможности для этого приложения. Чтобы использовать AOD, отключите Дополнительную защиту в настройках Android.</string>
+    <string name="press_here_to_check">Нажмите здесь, чтобы проверить.</string>
 </resources>

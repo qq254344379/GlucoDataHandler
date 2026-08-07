@@ -1032,5 +1032,7 @@ GlucoDataHandler само записва данни за кръвната зах
     <string name="pref_health_send_last_value">Само последната стойност</string>
     <string name="pref_health_send_last_value_summary">Ако е активирано, към Health Connect се изпраща само най-новата стойност на глюкозата. В противен случай се предават всички записани стойности от последната синхронизация.</string>
     <string name="new_sensor">Нов сензор</string>
-
+    <string name="aod_advanced_protection_enabled_dialog">AOD не може да се използва, докато е активирана Разширена защита.\nНастройката е деактивирана и може да бъде активирана отново в менюто с настройки само след като Разширената защита бъде деактивирана.</string>
+    <string name="aod_advanced_protection_enabled_info">Разширената защита е активна и блокира услугите за достъпност за това приложение. За да използвате AOD, моля, деактивирайте Разширената защита в настройките на Android.</string>
+    <string name="press_here_to_check">Hier drücken, um dies zu prüfen.</string>
 </resources>

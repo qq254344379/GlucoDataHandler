@@ -390,16 +390,29 @@ class MainActivity : AppCompatActivity(), NotifierInterface {
             if (!AODAccessibilityService.isAccessibilitySettingsEnabled(this)) {
                 permissionRequested = true
                 Log.w(LOG_ID, "Missing AOD permission")
-                Dialogs.showOkCancelDialog(this,
-                    resources.getString(CR.string.permission_missing_title),
-                    resources.getString(CR.string.setting_permission_missing_message, resources.getString(CR.string.pref_cat_aod)),
-                    { _, _ -> LockscreenSettingsFragment.requestAccessibilitySettings(this) },
-                    { _, _ ->
-                        sharedPref.edit {
-                            putBoolean(Constants.SHARED_PREF_AOD_WP_ENABLED, false)
-                        }
+                if(AODAccessibilityService.isAdvancedProtectionActive(this)) {
+                    sharedPref.edit {
+                        putBoolean(Constants.SHARED_PREF_AOD_WP_ENABLED, false)
                     }
-                )
+                    Dialogs.showOkDialog(this,
+                        CR.string.permission_missing_title,
+                        CR.string.aod_advanced_protection_enabled_dialog,
+                        null
+                    )
+                } else {
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.BAKLAVA) {  // Workaround for Android 17 beta issue, where the system does not retrieve the relevant state
+                        Dialogs.showOkCancelDialog(this,
+                            resources.getString(CR.string.permission_missing_title),
+                            resources.getString(CR.string.setting_permission_missing_message, resources.getString(CR.string.pref_cat_aod)),
+                            { _, _ -> LockscreenSettingsFragment.requestAccessibilitySettings(this) },
+                            { _, _ ->
+                                sharedPref.edit {
+                                    putBoolean(Constants.SHARED_PREF_AOD_WP_ENABLED, false)
+                                }
+                            }
+                        )
+                    }
+                }
             }
         }
         if(!permissionRequested && sharedPref.contains(Constants.SHARED_PREF_SOURCE_NOTIFICATION_ENABLED) && sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_NOTIFICATION_ENABLED, false)) {

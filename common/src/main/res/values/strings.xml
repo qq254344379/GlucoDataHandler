@@ -1099,5 +1099,8 @@ You can manage these permissions at any time in the Health Connect app settings.
     <string name="pref_health_send_last_value">Send only last value</string>
     <string name="pref_health_send_last_value_summary">If enabled, only the most recent glucose value is sent to Health Connect. Otherwise, all recorded values since the last synchronization are transmitted.</string>
     <string name="new_sensor">New Sensor</string>
+    <string name="aod_advanced_protection_enabled_dialog">AOD cannot be used while Advanced Protection is enabled.\nThe setting has been disabled and can only be re-enabled in the settings menu after Advanced Protection has been deactivated.</string>
+    <string name="aod_advanced_protection_enabled_info">Advanced Protection is active and blocks accessibility services for this app. To use AOD, please disable Advanced Protection in your Android settings.</string>
 
+    <string name="press_here_to_check">Press here to check it.</string>
 </resources>

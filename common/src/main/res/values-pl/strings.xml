@@ -1029,4 +1029,7 @@
     <string name="pref_health_send_last_value">Wyślij tylko ostatnią</string>
     <string name="pref_health_send_last_value_summary">Jeśli opcja zostanie włączona, do Health Connect wysyłana będzie tylko ostatnia dostępna wartość. W przeciwnym razie przesyłane będą wszystkie wartości zarejestrowane od ostatniej synchronizacji.</string>
     <string name="new_sensor">Nowy sensor</string>
+    <string name="aod_advanced_protection_enabled_dialog">Funkcja AOD nie może być używana, gdy włączona jest funkcja zaawansowanej ochrony.\nTo ustawienie zostało wyłączone i można je ponownie włączyć w menu ustawień dopiero po wyłączeniu funkcji zaawansowanej ochrony.</string>
+    <string name="aod_advanced_protection_enabled_info">Funkcja zaawansowanej ochrony jest aktywna i blokuje usługi ułatwień dostępu dla tej aplikacji. Aby korzystać z funkcji AOD, proszę wyłączyć funkcję zaawansowanej ochrony w ustawieniach systemu Android.</string>
+    <string name="press_here_to_check">Naciśnij tutaj, aby to sprawdzić.</string>
 </resources>
