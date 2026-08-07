@@ -342,6 +342,26 @@ class CarMediaBrowserService: MediaBrowserServiceCompat(), NotifierInterface, Sh
         }
     }
 
+
+    private fun getIcon(): Bitmap? {
+        val width = 600
+        val height = 1000
+        return when(sharedPref.getString(Constants.AA_MEDIA_ICON_STYLE, Constants.AA_MEDIA_ICON_STYLE_GRAPH)) {
+            Constants.AA_MEDIA_ICON_STYLE_TREND -> {
+                BitmapUtils.getRateAsBitmap(width = width, height = height)
+            }
+            Constants.AA_MEDIA_ICON_STYLE_GLUCOSE -> {
+                BitmapUtils.getGlucoseAsBitmap(width = width, height = height)
+            }
+            Constants.AA_MEDIA_ICON_STYLE_GLUCOSE_TREND -> {
+                BitmapUtils.getGlucoseTrendBitmap(width = width, height = width)
+            }
+            else -> {
+                getBackgroundImage()
+            }
+        }
+    }
+
     @SuppressLint("InflateParams")
     private fun getBackgroundImage(): Bitmap? {
         val coloredCover = sharedPref.getBoolean(Constants.AA_MEDIA_PLAYER_COLORED, true)
@@ -355,6 +375,7 @@ class CarMediaBrowserService: MediaBrowserServiceCompat(), NotifierInterface, Sh
             val lockscreenView = LayoutInflater.from(this).inflate(layoutId, null)
             val txtBgValue: TextView = lockscreenView.findViewById(R.id.glucose)
             val viewIcon: ImageView = lockscreenView.findViewById(R.id.trendImage)
+            lockscreenView.setBackgroundColor(Color.BLACK)
 
             txtBgValue.text = ReceiveData.getGlucoseAsString()
             if(coloredCover)
@@ -457,7 +478,7 @@ class CarMediaBrowserService: MediaBrowserServiceCompat(), NotifierInterface, Sh
                     )
                     .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, getDuration())
                     .putBitmap(MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON, BitmapUtils.getRateAsBitmap()!!)
-                    .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, getBackgroundImage()!!)
+                    .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, getIcon()!!)
                     .build()
             )
             if(playBackState == PlaybackState.STATE_PLAYING && lastGlucoseTime < ReceiveData.time) {
