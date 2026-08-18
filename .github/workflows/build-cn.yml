@@ -1,0 +1,48 @@
+name: Build GlucoDataHandler (Chinese Simplified)
+
+on:
+  push:
+    branches: [ master, main ]
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  build-cn:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-36 build-tools;36.0.0'
+
+      - name: Prepare Simplified Chinese resources
+        run: |
+          # values-zh (Simplified) is already committed in this repo.
+          # Force app default locale to zh so the app boots in Chinese.
+          if [ -f "common/src/main/res/values/strings.xml" ]; then
+            sed -i 's#<string name="locale">en</string>#<string name="locale">zh</string>#' common/src/main/res/values/strings.xml
+            echo "locale set to zh"
+          fi
+          ls -la common/src/main/res/values-zh/ || echo "values-zh missing!"
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build mobile debug APK
+        run: ./gradlew :mobile:assembleDebug --no-daemon
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: GlucoDataHandler-zh-CN
+          path: mobile/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
