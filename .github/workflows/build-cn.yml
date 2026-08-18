@@ -29,9 +29,10 @@ jobs:
           cat > local.properties <<EOF
           sdk.dir=$ANDROID_SDK_ROOT
           releasePath=.
-          DEXCOM_APPLICATION_ID=
-          DEXCOM_APPLICATION_ID_APAC=
-          NIGHTSCOUT_DEBUG_SERVER=
+          DEXCOM_APPLICATION_ID=""
+          DEXCOM_APPLICATION_ID_APAC=""
+          DEXCOM_APPLICATION_ID_APAC=""
+          NIGHTSCOUT_DEBUG_SERVER=""
           EOF
           echo "local.properties created:"
           cat local.properties
