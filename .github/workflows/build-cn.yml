@@ -24,9 +24,25 @@ jobs:
         with:
           packages: 'platforms;android-36 build-tools;36.0.0'
 
+      - name: Create local.properties
+        run: |
+          cat > local.properties <<EOF
+          sdk.dir=$ANDROID_SDK_ROOT
+          releasePath=.
+          DEXCOM_APPLICATION_ID=
+          DEXCOM_APPLICATION_ID_APAC=
+          NIGHTSCOUT_DEBUG_SERVER=
+          keystore.file=
+          keystore.alias=
+          keystore.password=
+          keystore.key.password=
+          EOF
+          echo "local.properties created:"
+          cat local.properties
+
       - name: Prepare Simplified Chinese resources
         run: |
-          # values-zh (Simplified) is already committed in this repo.
+          # values-zh (Simplified) is committed in this repo.
           # Force app default locale to zh so the app boots in Chinese.
           if [ -f "common/src/main/res/values/strings.xml" ]; then
             sed -i 's#<string name="locale">en</string>#<string name="locale">zh</string>#' common/src/main/res/values/strings.xml
