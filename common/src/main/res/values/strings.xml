@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="locale">en</string>
+    <string name="locale">zh</string>
     <string name="name" translatable="false">GlucoDataHandler</string>
     <string name="source_gdh" translatable="false">GlucoDataHandler</string>
     <string name="source_gdh_second" translatable="false">GDH Second</string>
