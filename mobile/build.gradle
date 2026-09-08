@@ -19,6 +19,15 @@ android {
                 keyPassword properties.getProperty('keystore.key.password')
             }
         }
+        fixedDebug {
+            def debugKeystore = new File(System.getProperty('user.home'), '.android/debug.keystore')
+            if (debugKeystore.exists()) {
+                storeFile debugKeystore
+                storePassword 'android'
+                keyAlias 'androiddebugkey'
+                keyPassword 'android'
+            }
+        }
     }
 
     namespace 'de.michelinside.glucodatahandler'
@@ -56,6 +65,7 @@ android {
         debug {
             minifyEnabled false
             resValue "string", "app_name", "GlucoDataHandler"
+            signingConfig signingConfigs.fixedDebug
         }
         second {
             applicationIdSuffix '.second'
