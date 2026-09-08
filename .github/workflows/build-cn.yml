@@ -2,7 +2,7 @@ name: Build GlucoDataHandler (Chinese Simplified)
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ master, main, keep-alive-enhancement ]
   workflow_dispatch:
   pull_request:
 
