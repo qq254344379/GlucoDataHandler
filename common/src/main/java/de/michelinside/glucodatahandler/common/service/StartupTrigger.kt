@@ -15,6 +15,65 @@ object StartupTrigger {
 
     private var alarmManager: AlarmManager? = null
     private var alarmPendingIntent: PendingIntent? = null
+    private var restartAlarmManager: AlarmManager? = null
+    private var restartPendingIntent: PendingIntent? = null
+
+    fun cancelRestart() {
+        try {
+            if(restartAlarmManager != null && restartPendingIntent != null) {
+                Log.i(LOG_ID, "Cancel scheduled restart")
+                restartAlarmManager!!.cancel(restartPendingIntent!!)
+                restartAlarmManager = null
+                restartPendingIntent = null
+            }
+        } catch (exc: Exception) {
+            Log.e(LOG_ID, "cancelRestart exception: " + exc.message.toString())
+        }
+    }
+
+    /**
+     * Keep-alive: schedule a one-shot restart of the service after a delay.
+     * Unlike triggerStartService this does NOT bail out while the service is still
+     * in foreground - the registered receiver decides whether a restart is needed.
+     * Used for onTaskRemoved (recent-apps swipe) and onDestroy (OEM task killer) recovery.
+     */
+    fun scheduleRestart(context: Context, receiver: Class<*>, delayMs: Long) {
+        try {
+            restartAlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
+            val intent = Intent(context, receiver)
+            intent.action = Constants.ACTION_START_FOREGROUND
+            intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES)
+            restartPendingIntent = PendingIntent.getBroadcast(
+                context,
+                912,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
+            )
+            var hasExactAlarmPermission = true
+            if (!Utils.canScheduleExactAlarms(context)) {
+                Log.d(LOG_ID, "Need permission to set exact alarm for restart!")
+                hasExactAlarmPermission = false
+            }
+            val alarmTime = System.currentTimeMillis() + delayMs
+            Log.i(LOG_ID, "Schedule restart at ${Utils.getUiTimeStamp(alarmTime)} - exactAlarm: $hasExactAlarmPermission")
+            if (hasExactAlarmPermission) {
+                restartAlarmManager!!.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    alarmTime,
+                    restartPendingIntent!!
+                )
+            } else {
+                restartAlarmManager!!.setAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    alarmTime,
+                    restartPendingIntent!!
+                )
+            }
+        } catch (exc: Exception) {
+            Log.e(LOG_ID, "scheduleRestart exception: " + exc.message.toString())
+            cancelRestart()
+        }
+    }
 
     fun stopTrigger() {
         try {

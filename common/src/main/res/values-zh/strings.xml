@@ -849,6 +849,10 @@
 
     <string name="pref_switch_standard_statistics">使用标准统计数据</string>
     <string name="pref_switch_standard_statistics_summary">使用标准统计范围值或 GDH 中的自订目标范围设置进行统计计算。</string>
+    <string name="pref_keep_alive_on_task_removed">从最近任务划掉后保持服务运行</string>
+    <string name="pref_keep_alive_on_task_removed_summary">从最近任务中移除 GDH 后短暂延时重启服务，防止被系统任务清理器杀掉。</string>
+    <string name="pref_restart_after_kill">服务被停止后自动重启</string>
+    <string name="pref_restart_after_kill_summary">当服务被系统或清理工具停止时自动重新启动。</string>
 
     <string name="aa_media_player_colored">彩色封面</string>
     <string name="aa_media_player_colored_summary_off">显示白色数值、趋势和图表</string>

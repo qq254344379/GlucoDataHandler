@@ -339,6 +339,10 @@ object Constants {
 
     const val SHARED_PREF_BATTERY_RECEIVER_ENABLED = "battery_receiver_enabled"
     const val SHARED_PREF_SHOW_BATTERY_PERCENT = "battery_show_percent"
+
+    // Keep-alive settings (see dont-kill-my-app recommendations)
+    const val SHARED_PREF_KEEP_ALIVE_ON_TASK_REMOVED = "keep_alive_on_task_removed"
+    const val SHARED_PREF_RESTART_AFTER_KILL = "restart_after_kill"
     const val SHARED_PREF_SEND_TO_WATCH_INTERVAL = "send_to_watch_interval"
     const val SHARED_PREF_SEND_TO_RECEIVER_INTERVAL = "send_to_receiver_interval"
 

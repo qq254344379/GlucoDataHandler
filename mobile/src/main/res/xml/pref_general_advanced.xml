@@ -41,4 +41,16 @@
             android:key="show_other_unit"
             android:title="@string/pref_show_other_unit"
             app:iconSpaceReserved="false" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="keep_alive_on_task_removed"
+            android:title="@string/pref_keep_alive_on_task_removed"
+            android:summary="@string/pref_keep_alive_on_task_removed_summary"
+            app:iconSpaceReserved="false" />
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="restart_after_kill"
+            android:title="@string/pref_restart_after_kill"
+            android:summary="@string/pref_restart_after_kill_summary"
+            app:iconSpaceReserved="false" />
 </PreferenceScreen>

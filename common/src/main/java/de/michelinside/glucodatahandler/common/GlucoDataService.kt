@@ -209,6 +209,7 @@ abstract class GlucoDataService(source: AppSource) : WearableListenerService(), 
                 isForegroundService = true
                 Log.i(LOG_ID, "Service in foreground started!")
                 StartupTrigger.stopTrigger()
+                StartupTrigger.cancelRestart()
             }
         } catch (exc: Exception) {
             Log.e(LOG_ID, "onStartCommand exception: " + exc.toString())
@@ -274,6 +275,7 @@ abstract class GlucoDataService(source: AppSource) : WearableListenerService(), 
     }
 
     override fun onDestroy() {
+        val wasForegroundService = isForegroundService
         try {
             Log.w(LOG_ID, "onDestroy called")
             sharedPref!!.unregisterOnSharedPreferenceChangeListener(this)
@@ -300,6 +302,49 @@ abstract class GlucoDataService(source: AppSource) : WearableListenerService(), 
             Log.close(this)
         } catch (exc: Exception) {
             Log.e(LOG_ID, "onDestroy exception: " + exc.toString())
+        }
+        maybeRestartAfterDestroy(wasForegroundService)
+    }
+
+    /**
+     * Keep-alive: if the foreground service gets destroyed by the system or an OEM task
+     * cleaner (not by an explicit user stop), schedule a one-shot restart via
+     * StartupTrigger. The receiver only restarts the service when it is not already
+     * running in foreground, so this cannot create a restart loop.
+     * Disable via setting SHARED_PREF_RESTART_AFTER_KILL (default on).
+     */
+    private fun maybeRestartAfterDestroy(wasForegroundService: Boolean) {
+        try {
+            val restartEnabled = sharedPref?.getBoolean(
+                Constants.SHARED_PREF_RESTART_AFTER_KILL,
+                true
+            ) ?: true
+            if (wasForegroundService && restartEnabled && startServiceReceiver != null) {
+                Log.w(LOG_ID, "Service destroyed while running as foreground service -> schedule restart")
+                StartupTrigger.scheduleRestart(this, startServiceReceiver!!, 3000)
+            }
+        } catch (exc: Exception) {
+            Log.e(LOG_ID, "maybeRestartAfterDestroy exception: " + exc.message.toString())
+        }
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        try {
+            super.onTaskRemoved(rootIntent)
+            val keepAlive = sharedPref?.getBoolean(
+                Constants.SHARED_PREF_KEEP_ALIVE_ON_TASK_REMOVED,
+                true
+            ) ?: true
+            if (keepAlive && isForegroundService && startServiceReceiver != null) {
+                // Some OEMs (Xiaomi, Meizu, ...) kill the whole process when the task is
+                // swiped away from the recent apps list. onDestroy is not guaranteed then,
+                // so we schedule a restart check. If the process survived, the receiver
+                // will see the service in foreground and do nothing.
+                Log.w(LOG_ID, "Task removed while service runs in foreground -> schedule restart check")
+                StartupTrigger.scheduleRestart(this, startServiceReceiver!!, 8000)
+            }
+        } catch (exc: Exception) {
+            Log.e(LOG_ID, "onTaskRemoved exception: " + exc.toString())
         }
     }
 
