@@ -28,6 +28,9 @@ open class XDripBroadcastReceiver: NamedBroadcastReceiver() {
         // xDrip+ broadcast sends for G7 collectors this description as compatibility for older AAPS versions.
         // AAPS only recognizes these descriptions as a native Dexcom source and so supports SMB.
         const val G7_COLLECTOR_DESC = "G6 Native / G5 Native"
+        // AAPS 3.x identifies the sensor type by SourceInfo (Intents.XDRIP_DATA_SOURCE). Only exact
+        // SourceSensor texts (e.g. "G6 Native", "G7 Native") are accepted as native Dexcom source.
+        const val G6_SOURCE_INFO = "G6 Native"
         fun createExtras(context: Context?, g7Collector: Boolean = false): Bundle? {
             if(ReceiveData.time == 0L)
                 return null
@@ -36,7 +39,13 @@ open class XDripBroadcastReceiver: NamedBroadcastReceiver() {
             extras.putString(BG_SLOPE_NAME, GlucoDataUtils.getDexcomLabel(ReceiveData.rate))
             extras.putDouble(BG_SLOPE,ReceiveData.rate.toDouble()/60000.0)
             extras.putLong(TIME,ReceiveData.time)
-            extras.putString(SOURCE_INFO,ReceiveData.sensorID)
+            if(g7Collector) {
+                // AAPS 3.x parses SourceInfo as sensor type (SourceSensor.fromString) - "G6 Native" enables
+                // native Dexcom features (advanced filtering/SMB). Keep SourceDesc for older AAPS 2.x parsing.
+                extras.putString(SOURCE_INFO, G6_SOURCE_INFO)
+            } else {
+                extras.putString(SOURCE_INFO,ReceiveData.sensorID)
+            }
             if (context != null) {
                 if(g7Collector) {
                     extras.putString(SOURCE_DESC, G7_COLLECTOR_DESC)
