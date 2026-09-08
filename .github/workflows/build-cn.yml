@@ -6,6 +6,9 @@ on:
   workflow_dispatch:
   pull_request:
 
+permissions:
+  contents: write
+
 jobs:
   build-cn:
     runs-on: ubuntu-latest
@@ -84,3 +87,32 @@ jobs:
           name: GlucoDataHandler-zh-CN-release
           path: mobile/build/outputs/apk/release/*.apk
           if-no-files-found: error
+
+      - name: Prepare release assets (version + build date naming)
+        id: prep
+        run: |
+          VER=$(grep -m1 'project.ext.set("versionName"' build.gradle | sed -E 's/.*"([^"]+)".*/\1/')
+          CN_DATE=$(TZ='Asia/Shanghai' date +%Y%m%d)
+          mkdir -p release_assets
+          cp mobile/build/outputs/apk/debug/GlucoDataHandler_*.apk release_assets/GlucoDataHandler_${VER}_${CN_DATE}_debug.apk
+          cp mobile/build/outputs/apk/release/GlucoDataHandler_*.apk release_assets/GlucoDataHandler_${VER}_${CN_DATE}_release.apk
+          echo "version=${VER}" >> "$GITHUB_OUTPUT"
+          echo "date=${CN_DATE}" >> "$GITHUB_OUTPUT"
+          ls -lh release_assets/
+
+      - name: Publish GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v${{ steps.prep.outputs.version }}-${{ steps.prep.outputs.date }}
+          name: "GlucoDataHandler v${{ steps.prep.outputs.version }} (${{ steps.prep.outputs.date }})"
+          body: |
+            Auto-built from branch ${{ github.ref_name }} (run #${{ github.run_number }}).
+
+            - debug APK signed with fixed debug keystore (can overwrite existing debug install)
+            - release APK signed with official release keystore
+          artifacts: "release_assets/*.apk"
+          allowUpdates: true
+          replacesArtifacts: true
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
