@@ -252,6 +252,9 @@ abstract class GlucoDataService(source: AppSource) : WearableListenerService(), 
             TextToSpeechUtils.initTextToSpeech(this)
             created = true
             InternalNotifier.notify(this, NotifySource.SERVICE_STARTED, null)
+            if(appSource == AppSource.PHONE_APP) {
+                StartupTrigger.ensureSourceWakeupCheck(this)
+            }
 
             if (BuildConfig.DEBUG && sharedPref!!.getBoolean(Constants.SHARED_PREF_DUMMY_VALUES, false)) {
                 Thread {

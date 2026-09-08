@@ -77,6 +77,30 @@ class NotificationReceiver : NotificationListenerService(), NamedReceiver {
         private var lastNotificationTime = 0L
         private var lastRestartListenerTime = 0L
         private var isConnected = false
+        private const val LAST_SEEN_PREFIX = "gdh_notif_last_seen_"
+
+        fun getLastNotificationSeen(context: Context, packageName: String): Long {
+            return try {
+                val sharedPref = context.getSharedPreferences(Constants.SHARED_PREF_TAG, Context.MODE_PRIVATE)
+                sharedPref.getLong(LAST_SEEN_PREFIX + packageName, 0L)
+            } catch (exc: Exception) {
+                Log.e(LOG_ID, "getLastNotificationSeen exception: " + exc.message.toString())
+                0L
+            }
+        }
+
+        fun markLastNotificationSeen(context: Context, packageName: String) {
+            try {
+                val sharedPref = context.getSharedPreferences(Constants.SHARED_PREF_TAG, Context.MODE_PRIVATE)
+                val glucoseApp = sharedPref.getString(Constants.SHARED_PREF_SOURCE_NOTIFICATION_READER_APP, "")
+                val iobApp = sharedPref.getString(Constants.SHARED_PREF_SOURCE_NOTIFICATION_READER_IOB_APP, "")
+                if(packageName == glucoseApp || packageName == iobApp) {
+                    sharedPref.edit().putLong(LAST_SEEN_PREFIX + packageName, System.currentTimeMillis()).apply()
+                }
+            } catch (exc: Exception) {
+                Log.e(LOG_ID, "markLastNotificationSeen exception: " + exc.message.toString())
+            }
+        }
 
         fun checkPermission(context: Context, checkListener: Boolean): Boolean {
             val notificationListeners = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
@@ -522,6 +546,7 @@ class NotificationReceiver : NotificationListenerService(), NamedReceiver {
             if (isRegistered()) {
                 statusBarNotification?.let { sbn ->
                     lastNotificationTime = System.currentTimeMillis()
+                    markLastNotificationSeen(applicationContext, sbn.packageName)
                     Log.d(LOG_ID, "New notification posted from ${sbn.packageName} - ongoing: ${sbn.isOngoing} (flags: ${sbn.notification?.flags}, prio: ${sbn.notification?.priority}, id=${sbn.id}, tag=${sbn.tag}, channel=${sbn.notification.channelId}, key=${sbn.key}) - posted: ${Utils.getUiTimeStamp(sbn.postTime)} (${sbn.postTime}) - when ${Utils.getUiTimeStamp(sbn.notification.`when`)} (${sbn.notification.`when`})")
                     if(sbn.packageName == applicationContext.packageName)
                         return  // ignore notification from own app

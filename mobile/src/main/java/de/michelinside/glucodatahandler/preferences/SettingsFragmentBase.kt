@@ -42,6 +42,7 @@ import de.michelinside.glucodatahandler.common.R as CR
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import de.michelinside.glucodatahandler.common.service.WearPhoneManager
+import de.michelinside.glucodatahandler.common.service.StartupTrigger
 
 abstract class SettingsFragmentBase(private val prefResId: Int) : SettingsFragmentCompatBase(), SharedPreferences.OnSharedPreferenceChangeListener {
     protected val LOG_ID = "GDH.SettingsFragmentBase"
@@ -133,6 +134,13 @@ abstract class SettingsFragmentBase(private val prefResId: Int) : SettingsFragme
                 }
                 Constants.SHARED_PREF_LARGE_ARROW_ICON -> {
                     InternalNotifier.notify(GlucoDataService.context!!, NotifySource.SETTINGS, null)
+                }
+                Constants.SHARED_PREF_SOURCE_NOTIFICATION_WAKEUP_ENABLED -> {
+                    if(sharedPreferences!!.getBoolean(Constants.SHARED_PREF_SOURCE_NOTIFICATION_WAKEUP_ENABLED, false)) {
+                        StartupTrigger.ensureSourceWakeupCheck(requireContext().applicationContext)
+                    } else {
+                        StartupTrigger.cancelSourceWakeupCheck()
+                    }
                 }
                 Constants.SHARED_PREF_SOURCE_JUGGLUCO_WEBSERVER_ENABLED -> {
                     // update last 24 hours to fill data

@@ -48,6 +48,12 @@
             android:summary="@string/pref_keep_alive_on_task_removed_summary"
             app:iconSpaceReserved="false" />
         <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="source_notification_wakeup_enabled"
+            android:title="@string/pref_source_notification_wakeup_enabled"
+            android:summary="@string/pref_source_notification_wakeup_enabled_summary"
+            app:iconSpaceReserved="false" />
+        <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="restart_after_kill"
             android:title="@string/pref_restart_after_kill"

@@ -428,6 +428,7 @@
         <receiver android:name=".common.notification.AlarmSnoozeEndReceiver" />
         <receiver android:name=".common.notification.AlarmInactiveTimeReceiver" />
         <receiver android:name=".StartServiceReceiver" />
+        <receiver android:name=".common.service.NotificationSourceWatcher" android:exported="false" />
         <receiver
             android:name=".common.utils.LocaleChangeNotifier"
             android:enabled="true"

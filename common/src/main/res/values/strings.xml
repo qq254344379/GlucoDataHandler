@@ -922,6 +922,8 @@
     <string name="pref_keep_alive_on_task_removed_summary">Restart the service shortly after removing GDH from recent apps. Helps against OEM task killers.</string>
     <string name="pref_restart_after_kill">Restart service if it gets stopped</string>
     <string name="pref_restart_after_kill_summary">Automatically restart the service if it was stopped by the system or a task cleaner.</string>
+    <string name="pref_source_notification_wakeup_enabled">Periodically wake up notification source app</string>
+    <string name="pref_source_notification_wakeup_enabled_summary">If the selected notification reader app stops sending notifications, try to launch it again every 5 minutes. Needs the overlay permission.</string>
     <string name="aa_media_player_colored">Colored cover</string>
     <string name="aa_media_player_colored_summary_off">Show white value, trend and graph</string>
     <string name="aa_media_player_colored_summary_on">Show colored value, trend and graph</string>

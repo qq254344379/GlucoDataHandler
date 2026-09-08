@@ -203,6 +203,9 @@ object Constants {
     const val SHARED_PREF_SOURCE_NOTIFICATION_READER_IOB_APP_REGEX="notification_reader_iob_app_regex"
     const val SHARED_PREF_SOURCE_NOTIFICATION_READER_COB_ENABLED="source_notification_cob_enabled"
     const val SHARED_PREF_SOURCE_NOTIFICATION_READER_COB_APP_REGEX="notification_reader_cob_app_regex"
+    // periodical wake-up of the selected source app if it stops posting notifications (keep-alive for notification reader)
+    const val SHARED_PREF_SOURCE_NOTIFICATION_WAKEUP_ENABLED="source_notification_wakeup_enabled"
+    const val ACTION_SOURCE_WAKEUP_CHECK = ACTION_PREFIX + "source_wakeup_check"
 
     // online sources
     const val SHARED_PREF_LIBRE_ENABLED="source_libre_enabled"
