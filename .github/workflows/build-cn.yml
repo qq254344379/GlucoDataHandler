@@ -32,6 +32,10 @@ jobs:
           DEXCOM_APPLICATION_ID=""
           DEXCOM_APPLICATION_ID_APAC=""
           NIGHTSCOUT_DEBUG_SERVER=""
+          keystore.file=/home/runner/.android/gdh-release.keystore
+          keystore.password=${{ secrets.ANDROID_RELEASE_KEYSTORE_PASSWORD }}
+          keystore.alias=${{ secrets.ANDROID_RELEASE_KEY_ALIAS }}
+          keystore.key.password=${{ secrets.ANDROID_RELEASE_KEY_PASSWORD }}
           EOF
           echo "local.properties created:"
           cat local.properties
@@ -52,15 +56,31 @@ jobs:
           echo "keystore sha256 (expect 862ab90b42152e22f20ed10e85dcd19afcd4488ebfcc4002f2c14d31fcde2fa8):"
           sha256sum ~/.android/debug.keystore
 
+      - name: Restore release keystore
+        run: |
+          echo "${{ secrets.ANDROID_RELEASE_KEYSTORE_B64 }}" | base64 -d > ~/.android/gdh-release.keystore
+          ls -la ~/.android/gdh-release.keystore
+          sha256sum ~/.android/gdh-release.keystore
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Build mobile debug APK
         run: ./gradlew :mobile:assembleDebug --no-daemon
 
-      - name: Upload APK
+      - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
           name: GlucoDataHandler-zh-CN
           path: mobile/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+      - name: Build mobile release APK
+        run: ./gradlew :mobile:assembleRelease --no-daemon
+
+      - name: Upload release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: GlucoDataHandler-zh-CN-release
+          path: mobile/build/outputs/apk/release/*.apk
           if-no-files-found: error
