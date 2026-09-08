@@ -24,7 +24,11 @@ open class XDripBroadcastReceiver: NamedBroadcastReceiver() {
         const val SOURCE_INFO = "com.eveningoutpost.dexdrip.Extras.SourceInfo"
         const val NOISE_BLOCK_LEVEL = "com.eveningoutpost.dexdrip.Extras.NoiseBlockLevel"
         const val NOISE = "com.eveningoutpost.dexdrip.Extras.Noise"
-        fun createExtras(context: Context?): Bundle? {
+        const val SENSOR_STARTED_AT = "com.eveningoutpost.dexdrip.Extras.SensorStartedAt"
+        // xDrip+ broadcast sends for G7 collectors this description as compatibility for older AAPS versions.
+        // AAPS only recognizes these descriptions as a native Dexcom source and so supports SMB.
+        const val G7_COLLECTOR_DESC = "G6 Native / G5 Native"
+        fun createExtras(context: Context?, g7Collector: Boolean = false): Bundle? {
             if(ReceiveData.time == 0L)
                 return null
             val extras = Bundle()
@@ -34,7 +38,14 @@ open class XDripBroadcastReceiver: NamedBroadcastReceiver() {
             extras.putLong(TIME,ReceiveData.time)
             extras.putString(SOURCE_INFO,ReceiveData.sensorID)
             if (context != null) {
-                extras.putString(SOURCE_DESC,context.getString(ReceiveData.source.resId))
+                if(g7Collector) {
+                    extras.putString(SOURCE_DESC, G7_COLLECTOR_DESC)
+                    if(ReceiveData.sensorStartTime > 0) {
+                        extras.putLong(SENSOR_STARTED_AT, ReceiveData.sensorStartTime)
+                    }
+                } else {
+                    extras.putString(SOURCE_DESC,context.getString(ReceiveData.source.resId))
+                }
             }
             return extras
         }

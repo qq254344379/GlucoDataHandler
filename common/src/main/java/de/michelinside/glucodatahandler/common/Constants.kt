@@ -83,6 +83,9 @@ object Constants {
     const val SHARED_PREF_XDRIP_BROADCAST_RECEIVERS = "xdrip_broadcast_receivers"
     const val SHARED_PREF_SOURCE_AIDEX_ENABLED = "source_aidex_enabled"
     const val SHARED_PREF_XDRIP_BROADCAST_SERVICE_API = "xdrip_broadcast_service_api"
+    const val XDRIP_BROADCAST_AAPS_PACKAGE = "info.nightscout.androidaps"
+    const val XDRIP_BROADCAST_AAPS_V2_G7_SUFFIX = ":g7"
+    const val XDRIP_BROADCAST_AAPS_V2_G7_TARGET = XDRIP_BROADCAST_AAPS_PACKAGE + XDRIP_BROADCAST_AAPS_V2_G7_SUFFIX
     const val SHARED_PREF_XDRIP_SERVER = "xdrip_server"
     const val SHARED_PREF_XDRIP_OPEN_SERVER = "xdrip_open_server"
     const val SHARED_PREF_XDRIP_SERVER_API_SECRET = "xdrip_server_api_secret"

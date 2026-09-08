@@ -88,6 +88,7 @@ abstract class SettingsFragmentBase(private val prefResId: Int) : SettingsFragme
             super.onResume()
             preferenceManager.sharedPreferences?.registerOnSharedPreferenceChangeListener(this)
             updateEnablePrefs.clear()
+            enforceXdripBroadcastExclusiveTargets(preferenceManager.sharedPreferences!!)
             update()
         } catch (exc: Exception) {
             Log.e(LOG_ID, "onResume exception: " + exc.toString())
@@ -146,6 +147,10 @@ abstract class SettingsFragmentBase(private val prefResId: Int) : SettingsFragme
                     // update last 24 hours to fill data
                     GlucoseDataReceiver.resetLastServerTime()
                     GlucoseDataReceiver.checkHandleWebServerRequests(requireContext(), true)
+                }
+                Constants.SHARED_PREF_XDRIP_BROADCAST_RECEIVERS -> {
+                    enforceXdripBroadcastExclusiveTargets(sharedPreferences!!)
+                    update()
                 }
             }
         } catch (exc: Exception) {
@@ -275,14 +280,52 @@ abstract class SettingsFragmentBase(private val prefResId: Int) : SettingsFragme
     }
 
 
-    protected fun setupReceivers(broadcastAction: String, multiSelectPrefKey: String) {
+    protected fun setupReceivers(broadcastAction: String, multiSelectPrefKey: String, addAapsV2G7Target: Boolean = false) {
         val selectTargets = findPreference<MultiSelectListPreference>(multiSelectPrefKey)
         if(selectTargets != null) {
             val receivers = getReceivers(broadcastAction)
-            // force "global broadcast" to be the first entry
-            selectTargets.entries =
-                arrayOf<CharSequence>(resources.getString(CR.string.pref_global_broadcast)) + receivers.keys.toTypedArray()
-            selectTargets.entryValues = arrayOf<CharSequence>("") + receivers.values.toTypedArray()
+            val entries = mutableListOf<CharSequence>(resources.getString(CR.string.pref_global_broadcast))
+            val entryValues = mutableListOf<CharSequence>("")
+            var aapsInstalled = false
+            for ((name, pkg) in receivers) {
+                entries.add(name)
+                entryValues.add(pkg)
+                if(pkg == Constants.XDRIP_BROADCAST_AAPS_PACKAGE) {
+                    aapsInstalled = true
+                }
+            }
+            // AAPSv2(G7) is a special xDrip+ G7 broadcast protocol mode for the AAPS app (enables SMB). It is
+            // mutually exclusive with the normal AAPS broadcast, so it is only offered if AAPS is installed.
+            if(addAapsV2G7Target && aapsInstalled) {
+                entries.add(resources.getString(CR.string.pref_aaps_v2_g7_target))
+                entryValues.add(Constants.XDRIP_BROADCAST_AAPS_V2_G7_TARGET)
+            }
+            selectTargets.entries = entries.toTypedArray()
+            selectTargets.entryValues = entryValues.toTypedArray()
+        }
+    }
+
+    // AAPSv2(G7) must not broadcast at the same time as the normal AAPS broadcast or a global broadcast
+    private fun enforceXdripBroadcastExclusiveTargets(sharedPreferences: SharedPreferences) {
+        try {
+            val targets = sharedPreferences.getStringSet(Constants.SHARED_PREF_XDRIP_BROADCAST_RECEIVERS, null) ?: return
+            if(!targets.contains(Constants.XDRIP_BROADCAST_AAPS_V2_G7_TARGET))
+                return
+            val newTargets = targets.toMutableSet()
+            var changed = false
+            if(newTargets.remove(Constants.XDRIP_BROADCAST_AAPS_PACKAGE)) {
+                Log.i(LOG_ID, "Removed normal AAPS broadcast target - exclusive with AAPSv2(G7)")
+                changed = true
+            }
+            if(newTargets.remove("")) {
+                Log.i(LOG_ID, "Removed global broadcast target - exclusive with AAPSv2(G7)")
+                changed = true
+            }
+            if(changed) {
+                sharedPreferences.edit().putStringSet(Constants.SHARED_PREF_XDRIP_BROADCAST_RECEIVERS, newTargets).apply()
+            }
+        } catch (exc: Exception) {
+            Log.e(LOG_ID, "enforceXdripBroadcastExclusiveTargets exception: " + exc.toString())
         }
     }
 
