@@ -6,6 +6,13 @@
             app:iconSpaceReserved="false">
                 <androidx.preference.ListPreference
                     android:defaultValue=""
+                    android:entries="@array/pref_app_language_labels"
+                    android:entryValues="@array/pref_app_language_values"
+                    android:key="app_language"
+                    android:title="@string/pref_app_language"
+                    app:iconSpaceReserved="false" />
+                <androidx.preference.ListPreference
+                    android:defaultValue=""
                     android:entries="@array/pref_application_color_scheme_labels"
                     android:entryValues="@array/pref_application_color_scheme_values"
                     android:key="application_color_scheme"

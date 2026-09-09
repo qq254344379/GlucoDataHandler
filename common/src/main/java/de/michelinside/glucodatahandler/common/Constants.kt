@@ -259,6 +259,7 @@ object Constants {
     const val SHARED_PREF_SOURCE_XDRIP_SET_NS_IOB_ACTION = "source_xdrip_activate_local_nightscout_iob_action"
 
     const val SHARED_PREF_APP_COLOR_SCHEME = "application_color_scheme"
+    const val SHARED_PREF_APP_LANGUAGE = "app_language"
 
     const val SHARED_PREF_EVERSENSE_ESEL_INFO = "source_eversense_info"
 

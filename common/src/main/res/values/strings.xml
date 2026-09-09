@@ -559,6 +559,8 @@
     <string name="wear_complication_tap_action">Complication tap action</string>
     <string name="activity_large_arrow_icon_summary">Please disable this setting, if the trend arrow is too big or cropped.</string>
     <string name="pref_cat_ui_settings">User interface</string>
+    <string name="pref_app_language">Language</string>
+    <string name="pref_app_language_system">System default</string>
     <string name="gda_foreground_info">GlucoDataAuto is running</string>
     <string name="battery_optimization_disabled">Battery optimization is enabled!\nPress here to disable it.</string>
     <string name="gda_source_follower_info_summary">If you are using a follower source, the app may not be started while connected to Android Auto, if you are using Android Auto Notifications only.\nTo make sure the app detects Android Auto connection you have to disable battery optimization.\nIf it still does not work, you can also enable foreground mode or you have to open the app in Android Auto once, if it is connected to Android Auto.</string>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 语言列表展示为各语言本名；仅第一项"跟随系统"随语言本地化 -->
+    <array name="pref_app_language_labels">
+        <item>@string/pref_app_language_system</item>
+        <item>"English"</item>
+        <item>"Български"</item>
+        <item>"Deutsch"</item>
+        <item>"Español"</item>
+        <item>"Français"</item>
+        <item>"Magyar"</item>
+        <item>"Italiano"</item>
+        <item>"日本語"</item>
+        <item>"Nederlands"</item>
+        <item>"Polski"</item>
+        <item>"Português"</item>
+        <item>"Русский"</item>
+        <item>"Slovenčina"</item>
+        <item>"Svenska"</item>
+        <item>"简体中文"</item>
+        <item>"繁體中文"</item>
+    </array>
+</resources>

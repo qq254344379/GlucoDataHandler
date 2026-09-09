@@ -12,6 +12,8 @@ import android.text.InputType
 import de.michelinside.glucodatahandler.common.utils.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import androidx.preference.EditTextPreference
 import androidx.preference.ListPreference
 import androidx.preference.MultiSelectListPreference
@@ -395,7 +397,34 @@ class GeneralAdvancedSettingsFragment: SettingsFragmentBase(R.xml.pref_general_a
 }
 
 class RangeSettingsFragment: SettingsFragmentBase(R.xml.pref_target_range) {}
-class UiSettingsFragment: SettingsFragmentBase(R.xml.pref_ui) {}
+class UiSettingsFragment: SettingsFragmentBase(R.xml.pref_ui) {
+    override fun initPreferences() {
+        Log.v(LOG_ID, "initPreferences called")
+        super.initPreferences()
+        updateLanguageSummary()
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        super.onSharedPreferenceChanged(sharedPreferences, key)
+        if (key == Constants.SHARED_PREF_APP_LANGUAGE) {
+            updateLanguageSummary()
+            val tag = sharedPreferences?.getString(Constants.SHARED_PREF_APP_LANGUAGE, "")
+            try {
+                val localeList = if (tag.isNullOrEmpty()) LocaleListCompat.getEmptyLocaleList() else LocaleListCompat.forLanguageTags(tag)
+                AppCompatDelegate.setApplicationLocales(localeList)
+            } catch (exc: Exception) {
+                Log.e(LOG_ID, "setApplicationLocales exception: " + exc.toString())
+            }
+        }
+    }
+
+    private fun updateLanguageSummary() {
+        val langPref = findPreference<ListPreference>(Constants.SHARED_PREF_APP_LANGUAGE)
+        if (langPref != null) {
+            langPref.summary = langPref.entry ?: resources.getString(CR.string.pref_app_language_system)
+        }
+    }
+}
 
 class ScreensaverSettingsFragment: SettingsFragmentBase(R.xml.screensaver_settings) {
     override fun initPreferences() {

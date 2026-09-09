@@ -490,6 +490,8 @@
     <string name="wear_complication_tap_action">小工具点选动作</string>
     <string name="activity_large_arrow_icon_summary">如趋势箭头太大导致被裁切请停用此设置</string>
     <string name="pref_cat_ui_settings">使用者界面</string>
+    <string name="pref_app_language">语言</string>
+    <string name="pref_app_language_system">跟随系统</string>
     <string name="gda_foreground_info">GlucoDataAuto 执行中</string>
     <string name="battery_optimization_disabled">已启用电池最佳化！\n按这里停用</string>
     <string name="gda_source_follower_info_summary">如果您使用追踪器数据来源且只使用 Android Auto 通知时，程序可能无法在连接 Android Auto 时自动启动\n若要确保程序能侦测 Android Auto 连接，必须停用电池最佳化\n如果仍然无法运作，也可以启用前景模式，或在连接时于 Android Auto 中手动开启程序一次</string>
