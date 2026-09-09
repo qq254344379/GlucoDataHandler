@@ -9,7 +9,7 @@
             app:key="source_aidex_enabled"
             app:title="@string/src_enabled"
             app:summary="@string/source_aidex_summary"
-            app:defaultValue="true"
+            app:defaultValue="false"
             app:iconSpaceReserved="false" />
 
     </PreferenceCategory>

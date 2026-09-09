@@ -48,7 +48,7 @@ class SourceOfflineFragment : PreferenceFragmentCompatBase() {
     private fun getDefaultEnableState(key: String): Boolean {
         return when(key) {
             Constants.SHARED_PREF_XDRIP_BROADCAST_SERVICE_API -> false
-            else -> true
+            else -> false
         }
     }
 

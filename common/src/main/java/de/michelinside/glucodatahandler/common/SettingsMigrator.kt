@@ -337,7 +337,7 @@ object SettingsMigrator {
             // check current source for Juggluco and if Nightscout is enabled for local requests supporting IOB
             var webServer = false
             var apiSecret = ""
-            if(sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED, true)
+            if(sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED, false)
                 && sharedPref.getBoolean(Constants.SHARED_PREF_NIGHTSCOUT_ENABLED, false)
                 && sharedPref.getBoolean(Constants.SHARED_PREF_NIGHTSCOUT_IOB_COB, false)
                 && sharedPref.getString(Constants.SHARED_PREF_NIGHTSCOUT_TOKEN, "").isNullOrEmpty()

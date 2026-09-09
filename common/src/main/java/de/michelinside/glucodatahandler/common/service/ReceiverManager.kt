@@ -75,7 +75,7 @@ object ReceiverManager {
         try {
             val sharedPref = context.getSharedPreferences(Constants.SHARED_PREF_TAG, MODE_PRIVATE)
             if(key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED) {
-                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED, true)) {
+                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED, false)) {
                     if(glucoDataReceiver == null) {
                         glucoDataReceiver = GlucoseDataReceiver()
                         if(!registerReceiver(context, glucoDataReceiver!!, IntentFilter("glucodata.Minute")))
@@ -88,7 +88,7 @@ object ReceiverManager {
             }
 
             if(key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_XDRIP_ENABLED) {
-                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_XDRIP_ENABLED, true)) {
+                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_XDRIP_ENABLED, false)) {
                     if(xDripReceiver == null) {
                         xDripReceiver = XDripBroadcastReceiver()
                         if(!registerReceiver(context, xDripReceiver!!, IntentFilter("com.eveningoutpost.dexdrip.BgEstimate")))
@@ -101,7 +101,7 @@ object ReceiverManager {
             }
 
             if(key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_AAPS_ENABLED) {
-                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_AAPS_ENABLED, true)) {
+                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_AAPS_ENABLED, false)) {
                     if(aapsReceiver == null) {
                         aapsReceiver = AAPSReceiver()
                         if(!registerReceiver(context, aapsReceiver!!, IntentFilter(Intents.AAPS_BROADCAST_ACTION)))
@@ -114,7 +114,7 @@ object ReceiverManager {
             }
 
             if(key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_BYODA_ENABLED) {
-                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_BYODA_ENABLED, true)) {
+                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_BYODA_ENABLED, false)) {
                     if(dexcomReceiver == null) {
                         val dexcomFilter = IntentFilter()
                         dexcomFilter.addAction(Intents.DEXCOM_CGM_BROADCAST_ACTION)
@@ -130,7 +130,7 @@ object ReceiverManager {
             }
 
             if(key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_EVERSENSE_ENABLED) {
-                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_EVERSENSE_ENABLED, true)) {
+                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_EVERSENSE_ENABLED, false)) {
                     if(nsEmulatorReceiver == null) {
                         nsEmulatorReceiver = NsEmulatorReceiver()
                         if(!registerReceiver(context, nsEmulatorReceiver!!, IntentFilter(Intents.NS_EMULATOR_BROADCAST_ACTION)))
@@ -143,7 +143,7 @@ object ReceiverManager {
             }
 
             if(key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_DIABOX_ENABLED) {
-                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_DIABOX_ENABLED, true)) {
+                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_DIABOX_ENABLED, false)) {
                     if(diaboxReceiver == null) {
                         diaboxReceiver = DiaboxReceiver()
                         if(!registerReceiver(context, diaboxReceiver!!, IntentFilter(Intents.DIABOX_BROADCAST_ACTION)))
@@ -156,7 +156,7 @@ object ReceiverManager {
             }
 
             if(key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_LIBRE_PATCHED_ENABLED) {
-                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_LIBRE_PATCHED_ENABLED, true)) {
+                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_LIBRE_PATCHED_ENABLED, false)) {
                     if(librePatchedReceiver == null) {
                         librePatchedReceiver = LibrePatchedReceiver()
                         val filter = IntentFilter()
@@ -171,7 +171,7 @@ object ReceiverManager {
                 }
             }
             if (key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_AIDEX_ENABLED) {
-                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_AIDEX_ENABLED, true)) {
+                if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_AIDEX_ENABLED, false)) {
                     if (aidexReceiver == null) {
                         aidexReceiver = AidexBroadcastReceiver()
                         val filter = IntentFilter()

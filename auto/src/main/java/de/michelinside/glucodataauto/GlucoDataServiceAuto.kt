@@ -98,7 +98,7 @@ class GlucoDataServiceAuto: Service(), SharedPreferences.OnSharedPreferenceChang
                 // check current source for Juggluco and if Nightscout is enabled for local requests supporting IOB
                 var webServer = false
                 var apiSecret = ""
-                if(sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED, true)
+                if(sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED, false)
                     && sharedPref.getBoolean(Constants.SHARED_PREF_NIGHTSCOUT_ENABLED, false)
                     && sharedPref.getBoolean(Constants.SHARED_PREF_NIGHTSCOUT_IOB_COB, false)
                     && sharedPref.getString(Constants.SHARED_PREF_NIGHTSCOUT_TOKEN, "").isNullOrEmpty()
@@ -304,7 +304,7 @@ class GlucoDataServiceAuto: Service(), SharedPreferences.OnSharedPreferenceChang
             try {
                 val sharedPref = context.getSharedPreferences(Constants.SHARED_PREF_TAG, MODE_PRIVATE)
                 if(key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED) {
-                    if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED, true)) {
+                    if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED, false)) {
                         if(glucoDataReceiver == null) {
                             glucoDataReceiver = GlucoDataReceiver()
                             if(!ReceiverManager.registerReceiver(context, glucoDataReceiver!!, IntentFilter("glucodata.Minute")))
@@ -317,7 +317,7 @@ class GlucoDataServiceAuto: Service(), SharedPreferences.OnSharedPreferenceChang
                 }
 
                 if(key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_XDRIP_ENABLED) {
-                    if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_XDRIP_ENABLED, true)) {
+                    if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_XDRIP_ENABLED, false)) {
                         if(xDripReceiver == null) {
                             xDripReceiver = XDripReceiver()
                             if(!ReceiverManager.registerReceiver(context, xDripReceiver!!, IntentFilter("com.eveningoutpost.dexdrip.BgEstimate")))
@@ -330,7 +330,7 @@ class GlucoDataServiceAuto: Service(), SharedPreferences.OnSharedPreferenceChang
                 }
 
                 if(key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_AAPS_ENABLED) {
-                    if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_AAPS_ENABLED, true)) {
+                    if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_AAPS_ENABLED, false)) {
                         if(aapsReceiver == null) {
                             aapsReceiver = AAPSReceiver()
                             if(!ReceiverManager.registerReceiver(context, aapsReceiver!!, IntentFilter(Intents.AAPS_BROADCAST_ACTION)))
@@ -343,7 +343,7 @@ class GlucoDataServiceAuto: Service(), SharedPreferences.OnSharedPreferenceChang
                 }
 
                 if(key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_BYODA_ENABLED) {
-                    if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_BYODA_ENABLED, true)) {
+                    if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_BYODA_ENABLED, false)) {
                         if(dexcomReceiver == null) {
                             val dexcomFilter = IntentFilter()
                             dexcomFilter.addAction(Intents.DEXCOM_CGM_BROADCAST_ACTION)
@@ -359,7 +359,7 @@ class GlucoDataServiceAuto: Service(), SharedPreferences.OnSharedPreferenceChang
                 }
 
                 if(key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_EVERSENSE_ENABLED) {
-                    if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_EVERSENSE_ENABLED, true)) {
+                    if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_EVERSENSE_ENABLED, false)) {
                         if(nsEmulatorReceiver == null) {
                             nsEmulatorReceiver = NsEmulatorReceiver()
                             if(!ReceiverManager.registerReceiver(context, nsEmulatorReceiver!!, IntentFilter(Intents.NS_EMULATOR_BROADCAST_ACTION)))
@@ -372,7 +372,7 @@ class GlucoDataServiceAuto: Service(), SharedPreferences.OnSharedPreferenceChang
                 }
 
                 if(key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_DIABOX_ENABLED) {
-                    if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_DIABOX_ENABLED, true)) {
+                    if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_DIABOX_ENABLED, false)) {
                         if(diaboxReceiver == null) {
                             diaboxReceiver = DiaboxReceiver()
                             if(!ReceiverManager.registerReceiver(context, diaboxReceiver!!, IntentFilter(Intents.DIABOX_BROADCAST_ACTION)))
@@ -385,7 +385,7 @@ class GlucoDataServiceAuto: Service(), SharedPreferences.OnSharedPreferenceChang
                 }
 
                 if(key.isNullOrEmpty() || key == Constants.SHARED_PREF_SOURCE_LIBRE_PATCHED_ENABLED) {
-                    if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_LIBRE_PATCHED_ENABLED, true)) {
+                    if (sharedPref.getBoolean(Constants.SHARED_PREF_SOURCE_LIBRE_PATCHED_ENABLED, false)) {
                         if(librePatchedReceiver == null) {
                             librePatchedReceiver = LibrePatchedReceiver()
                             val filter = IntentFilter()

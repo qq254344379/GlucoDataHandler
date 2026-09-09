@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <androidx.preference.SwitchPreferenceCompat
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="source_eversense_enabled"
         android:title="@string/src_enabled"
         android:summaryOn="@string/src_offline_enabled_summary_on"

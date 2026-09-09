@@ -94,7 +94,7 @@ open class GlucoseDataReceiver: NamedBroadcastReceiver() {
 
         private fun hasWebServerSupport(): Boolean {
             return (GlucoDataService.appSource != AppSource.WEAR_APP
-                    && GlucoDataService.sharedPref?.getBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED, true) == true
+                    && GlucoDataService.sharedPref?.getBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED, false) == true
                     && GlucoDataService.sharedPref?.getBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_WEBSERVER_ENABLED, false) == true)
         }
 

@@ -231,12 +231,12 @@ class GlucoDataServiceMobile: GlucoDataService(AppSource.PHONE_APP), NotifierInt
         // other settings
         if (sharedPref != null) {
             bundle.putBoolean(Constants.SHARED_PREF_SHOW_OTHER_UNIT, sharedPref!!.getBoolean(Constants.SHARED_PREF_SHOW_OTHER_UNIT, ReceiveData.isMmol))
-            bundle.putBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED, sharedPref!!.getBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED, true))
-            bundle.putBoolean(Constants.SHARED_PREF_SOURCE_XDRIP_ENABLED, sharedPref!!.getBoolean(Constants.SHARED_PREF_SOURCE_XDRIP_ENABLED, true))
-            bundle.putBoolean(Constants.SHARED_PREF_SOURCE_AAPS_ENABLED, sharedPref!!.getBoolean(Constants.SHARED_PREF_SOURCE_AAPS_ENABLED, true))
-            bundle.putBoolean(Constants.SHARED_PREF_SOURCE_BYODA_ENABLED, sharedPref!!.getBoolean(Constants.SHARED_PREF_SOURCE_BYODA_ENABLED, true))
-            bundle.putBoolean(Constants.SHARED_PREF_SOURCE_EVERSENSE_ENABLED, sharedPref!!.getBoolean(Constants.SHARED_PREF_SOURCE_EVERSENSE_ENABLED, true))
-            bundle.putBoolean(Constants.SHARED_PREF_SOURCE_DIABOX_ENABLED, sharedPref!!.getBoolean(Constants.SHARED_PREF_SOURCE_DIABOX_ENABLED, true))
+            bundle.putBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED, sharedPref!!.getBoolean(Constants.SHARED_PREF_SOURCE_JUGGLUCO_ENABLED, false))
+            bundle.putBoolean(Constants.SHARED_PREF_SOURCE_XDRIP_ENABLED, sharedPref!!.getBoolean(Constants.SHARED_PREF_SOURCE_XDRIP_ENABLED, false))
+            bundle.putBoolean(Constants.SHARED_PREF_SOURCE_AAPS_ENABLED, sharedPref!!.getBoolean(Constants.SHARED_PREF_SOURCE_AAPS_ENABLED, false))
+            bundle.putBoolean(Constants.SHARED_PREF_SOURCE_BYODA_ENABLED, sharedPref!!.getBoolean(Constants.SHARED_PREF_SOURCE_BYODA_ENABLED, false))
+            bundle.putBoolean(Constants.SHARED_PREF_SOURCE_EVERSENSE_ENABLED, sharedPref!!.getBoolean(Constants.SHARED_PREF_SOURCE_EVERSENSE_ENABLED, false))
+            bundle.putBoolean(Constants.SHARED_PREF_SOURCE_DIABOX_ENABLED, sharedPref!!.getBoolean(Constants.SHARED_PREF_SOURCE_DIABOX_ENABLED, false))
              // SHARED_PREF_SOURCE_NOTIFICATION_ENABLED is phone-only and must NOT be sent to wear
              bundle.putBoolean(Constants.SHARED_PREF_PHONE_WEAR_SCREEN_OFF_UPDATE, sharedPref!!.getBoolean(Constants.SHARED_PREF_PHONE_WEAR_SCREEN_OFF_UPDATE, true))
             bundle.putString(Constants.SHARED_PREF_SENSOR_RUNTIME, sharedPref!!.getString(Constants.SHARED_PREF_SENSOR_RUNTIME, "14"))
