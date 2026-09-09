@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.text.InputType
 import de.michelinside.glucodatahandler.common.utils.Log
+import de.michelinside.glucodatahandler.common.utils.TextToSpeechUtils
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatDelegate
@@ -414,6 +415,16 @@ class UiSettingsFragment: SettingsFragmentBase(R.xml.pref_ui) {
                 AppCompatDelegate.setApplicationLocales(localeList)
             } catch (exc: Exception) {
                 Log.e(LOG_ID, "setApplicationLocales exception: " + exc.toString())
+            }
+            // Re-create TTS engine so spoken announcements follow the new UI language
+            try {
+                if (TextToSpeechUtils.isAvailable()) {
+                    val ctx = requireContext()
+                    TextToSpeechUtils.destroyTextToSpeech(ctx)
+                    TextToSpeechUtils.initTextToSpeech(ctx)
+                }
+            } catch (excTts: Exception) {
+                Log.e(LOG_ID, "TTS locale sync exception: " + excTts.toString())
             }
         }
     }

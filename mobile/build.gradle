@@ -51,12 +51,14 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             resValue "string", "app_name", "GlucoDataHandler"
             signingConfig signingConfigs.release
         }
         dev_release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             versionNameSuffix '-dev.' + rootProject.devVersion
             resValue "string", "app_name", "GlucoDataHandler"
@@ -71,6 +73,7 @@ android {
             applicationIdSuffix '.second'
             versionNameSuffix '_SECOND'
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             resValue "string", "app_name", "GDH Second"
             signingConfig signingConfigs.release

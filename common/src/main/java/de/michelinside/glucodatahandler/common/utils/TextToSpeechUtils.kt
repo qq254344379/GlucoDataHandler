@@ -10,6 +10,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import de.michelinside.glucodatahandler.common.Constants
 import de.michelinside.glucodatahandler.common.R
 import de.michelinside.glucodatahandler.common.notifier.InternalNotifier
 import de.michelinside.glucodatahandler.common.notifier.NotifySource
@@ -30,9 +31,32 @@ object TextToSpeechUtils {
     }
 
     fun localChanged(context: Context): Boolean {
-        val newLocale = context.resources.getString(R.string.locale)
+        val newLocale = getTTSLocaleTag(context)
         Log.d(LOG_ID, "check locale changed with curLocal='${curLocal}' - newLocale='${newLocale}'")
         return curLocal != newLocale
+    }
+
+    /**
+     * Resolve the TTS language tag: prefer the in-app language setting (app_language),
+     * fall back to the resource-defined locale string (default behaviour).
+     */
+    fun getTTSLocaleTag(context: Context): String {
+        val prefs = context.getSharedPreferences(Constants.SHARED_PREF_TAG, Context.MODE_PRIVATE)
+        val appLang = prefs.getString(Constants.SHARED_PREF_APP_LANGUAGE, null)
+        if (!appLang.isNullOrEmpty()) {
+            return appLang
+        }
+        return context.resources.getString(R.string.locale)
+    }
+
+    private fun getLocaleFromTag(tag: String): Locale? {
+        return try {
+            val locale = Locale.forLanguageTag(tag)
+            if (locale.language.isNullOrEmpty()) null else locale
+        } catch (exc: Exception) {
+            Log.e(LOG_ID, "invalid locale tag '$tag': " + exc.toString())
+            null
+        }
     }
 
     fun initTextToSpeech(context: Context) {
@@ -46,8 +70,8 @@ object TextToSpeechUtils {
                             if(textToSpeech!!.voices != null && textToSpeech!!.voices.isNotEmpty()) {
                                 Log.i(LOG_ID, "language: ${textToSpeech!!.language} - default: ${textToSpeech!!.defaultVoice?.name} - voices: ${textToSpeech!!.voices.size}")
                                 val curLanguage = textToSpeech!!.voice?.locale
-                                curLocal = context.resources.getString(R.string.locale)
-                                textToSpeech!!.language = Locale(curLocal)
+                                curLocal = getTTSLocaleTag(context)
+                                textToSpeech!!.language = getLocaleFromTag(curLocal) ?: Locale(curLocal)
                                 if(textToSpeech!!.voice == null) {
                                     Log.w(LOG_ID, "TextToSpeech voice is null, try default: ${textToSpeech!!.defaultVoice} or old language: ${curLanguage}")
                                     if(textToSpeech!!.defaultVoice != null)
