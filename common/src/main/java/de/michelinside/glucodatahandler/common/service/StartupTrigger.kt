@@ -128,10 +128,12 @@ object StartupTrigger {
             wakeupAlarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
             var hasExactAlarmPermission = true
             if (!Utils.canScheduleExactAlarms(context)) {
-                Log.d(LOG_ID, "No exact alarm permission for source wakeup check!")
+                Log.w(LOG_ID, "No exact alarm permission for source wakeup check!")
                 hasExactAlarmPermission = false
             }
-            val alarmTime = System.currentTimeMillis() + WAKEUP_CHECK_INTERVAL_MS
+            // keep the periodic check in sync with the configured reader interval (B1)
+            val checkIntervalMin = sharedPref.getInt(Constants.SHARED_PREF_SOURCE_NOTIFICATION_READER_INTERVAl, 5).coerceAtLeast(1)
+            val alarmTime = System.currentTimeMillis() + checkIntervalMin * 60 * 1000L
             Log.i(LOG_ID, "Schedule source wakeup check at ${Utils.getUiTimeStamp(alarmTime)} - exactAlarm: $hasExactAlarmPermission")
             if (hasExactAlarmPermission) {
                 wakeupAlarmManager!!.setExactAndAllowWhileIdle(
@@ -165,6 +167,17 @@ object StartupTrigger {
             wakeupAlarmManager = null
             wakeupPendingIntent = null
         }
+    }
+
+    /**
+     * Called by NotificationSourceWatcher after the one-shot wakeup alarm fired:
+     * the PendingIntent has been consumed, so clear the in-memory scheduling fields.
+     * Without this the "already scheduled" guard in ensureSourceWakeupCheck() would
+     * return forever and the periodic check chain would stop after the first round.
+     */
+    fun wakeupCheckFired() {
+        wakeupAlarmManager = null
+        wakeupPendingIntent = null
     }
 
     fun triggerStartService(context: Context, receiver: Class<*>) {

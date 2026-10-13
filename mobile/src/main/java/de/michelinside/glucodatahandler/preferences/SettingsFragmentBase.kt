@@ -1,12 +1,15 @@
 package de.michelinside.glucodatahandler.preferences
 
+import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
 import android.provider.Settings
 import android.text.InputType
 import de.michelinside.glucodatahandler.common.utils.Log
@@ -158,6 +161,57 @@ abstract class SettingsFragmentBase(private val prefResId: Int) : SettingsFragme
             }
         } catch (exc: Exception) {
             Log.e(LOG_ID, "onSharedPreferenceChanged exception: " + exc.toString())
+        }
+    }
+
+    // A3: when keep-alive is enabled, self-check the three special permissions that make
+    // background wake-up work and guide the user to grant the first missing one
+    private fun checkWakeupPermissions() {
+        try {
+            val context = requireContext()
+            val missing = ArrayList<Int>()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                if (!alarmManager.canScheduleExactAlarms()) missing.add(0)
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) missing.add(1)
+            val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+            if (!powerManager.isIgnoringBatteryOptimizations(context.packageName)) missing.add(2)
+            if (missing.isEmpty()) {
+                Log.i(LOG_ID, "All wake-up permissions are granted")
+                return
+            }
+            val names = missing.mapNotNull {
+                when (it) {
+                    0 -> context.getString(CR.string.permission_name_exact_alarm)
+                    1 -> context.getString(CR.string.permission_name_overlay)
+                    2 -> context.getString(CR.string.permission_name_battery)
+                    else -> null
+                }
+            }
+            Log.w(LOG_ID, "Missing wake-up permissions: ${names.joinToString(", ")} - showing guidance")
+            androidx.appcompat.app.AlertDialog.Builder(context)
+                .setTitle(CR.string.wakeup_permission_dialog_title)
+                .setMessage(context.getString(CR.string.wakeup_permission_dialog_message, names.joinToString("\n• ")))
+                .setCancelable(true)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    openMissingWakeupPermission(missing[0], context)
+                }
+                .show()
+        } catch (exc: Exception) {
+            Log.e(LOG_ID, "checkWakeupPermissions exception: " + exc.message.toString())
+        }
+    }
+
+    private fun openMissingWakeupPermission(permission: Int, context: Context) {
+        try {
+            when (permission) {
+                0 -> context.startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM, Uri.parse("package:" + context.packageName)))
+                1 -> context.startActivity(Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.packageName)))
+                2 -> context.startActivity(Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, Uri.parse("package:" + context.packageName)))
+            }
+        } catch (exc: Exception) {
+            Log.e(LOG_ID, "openMissingWakeupPermission exception: " + exc.message.toString())
         }
     }
 

@@ -210,6 +210,10 @@ object Constants {
     const val SHARED_PREF_SOURCE_NOTIFICATION_WAKEUP_ENABLED="source_notification_wakeup_enabled"
     const val ACTION_SOURCE_WAKEUP_CHECK = ACTION_PREFIX + "source_wakeup_check"
 
+    // Keep-alive back-off state keys (used by NotificationSourceWatcher, suffix = package name)
+    const val SHARED_PREF_WAKEUP_LAST_ATTEMPT_PREFIX = "source_wakeup_last_attempt_"
+    const val SHARED_PREF_WAKEUP_ATTEMPT_COUNT_PREFIX = "source_wakeup_attempt_count_"
+
     // online sources
     const val SHARED_PREF_LIBRE_ENABLED="source_libre_enabled"
     const val SHARED_PREF_LIBRE_USER="source_libre_user"

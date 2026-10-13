@@ -563,6 +563,12 @@
     <string name="pref_app_language_system">System default</string>
     <string name="gda_foreground_info">GlucoDataAuto is running</string>
     <string name="battery_optimization_disabled">Battery optimization is enabled!\nPress here to disable it.</string>
+    <string name="overlay_permission_disabled">Overlay permission is disabled!\nGlucoDataHandler may not wake up the source app reliably.\nPress here to enable it.</string>
+    <string name="wakeup_permission_dialog_title">Grant permissions for source app keep-alive</string>
+    <string name="wakeup_permission_dialog_message">Periodic wake-up of the selected source app needs these permissions:\n\n%s\n\nPress OK to open the first missing permission. Enable it, then switch the setting off/on again for the next one.</string>
+    <string name="permission_name_exact_alarm">Exact alarm</string>
+    <string name="permission_name_overlay">Display over other apps</string>
+    <string name="permission_name_battery">Ignore battery optimization</string>
     <string name="gda_source_follower_info_summary">If you are using a follower source, the app may not be started while connected to Android Auto, if you are using Android Auto Notifications only.\nTo make sure the app detects Android Auto connection you have to disable battery optimization.\nIf it still does not work, you can also enable foreground mode or you have to open the app in Android Auto once, if it is connected to Android Auto.</string>
     <string name="gda_help_aa_title">Setup Android Auto</string>
     <string name="gda_help_aa_title_summary">Android Auto is either a separate app or part of the system and can be accessed through the Android settings.\nTo activate GlucoDataAuto for Android Auto, you have to do the following steps:</string>

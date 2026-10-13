@@ -798,6 +798,21 @@ class MainActivity : AppCompatActivity(), NotifierInterface {
             }
             tableNotes.addView(createRow(CR.string.activity_main_schedule_exact_alarm, onClickListener))
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            Log.w(LOG_ID, "Overlay permission is not granted")
+            val onClickListener = OnClickListener {
+                try {
+                    val intent = Intent(
+                        Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        "package:$packageName".toUri()
+                    )
+                    startActivity(intent)
+                } catch (exc: Exception) {
+                    Log.e(LOG_ID, "Overlay permission exception: " + exc.message.toString() )
+                }
+            }
+            tableNotes.addView(createRow(CR.string.overlay_permission_disabled, onClickListener))
+        }
         if (Utils.isHighContrastTextEnabled(this)) {
             Log.w(LOG_ID, "High contrast is active")
             val onClickListener = OnClickListener {

@@ -21,6 +21,13 @@ import de.michelinside.glucodatahandler.common.utils.Log
  * to start background activities. Force-stopped apps can not be woken up at all.
  */
 class NotificationSourceWatcher : BroadcastReceiver() {
+    companion object {
+        private const val MAX_BACKOFF_MS = 30 * 60 * 1000L
+        private const val MAX_BACKOFF_EXPONENT = 5 // 2^5 = 32x max multiplier before cap
+        private const val PREF_KEY_LAST_ATTEMPT = Constants.SHARED_PREF_WAKEUP_LAST_ATTEMPT_PREFIX
+        private const val PREF_KEY_ATTEMPT_COUNT = Constants.SHARED_PREF_WAKEUP_ATTEMPT_COUNT_PREFIX
+    }
+
 
     private val LOG_ID = "GDH.NotificationSourceWatcher"
 
@@ -53,16 +60,38 @@ class NotificationSourceWatcher : BroadcastReceiver() {
             for(pkg in targets) {
                 val lastSeen = NotificationReceiver.getLastNotificationSeen(context, pkg)
                 val silentFor = if(lastSeen > 0) now - lastSeen else -1L
-                if(lastSeen == 0L || silentFor > timeoutMs) {
-                    Log.w(LOG_ID, "Source app $pkg is silent (last seen: ${if(lastSeen>0) silentFor/1000 else "never"}s ago, timeout ${timeoutMs/1000}s) - try to wake it up")
-                    wakeUpApp(context, pkg)
-                } else {
-                    Log.d(LOG_ID, "Source app $pkg is alive (last seen ${silentFor/1000}s ago, timeout ${timeoutMs/1000}s)")
+                val alive = lastSeen > 0L && silentFor <= timeoutMs
+                if(alive) {
+                    // app posts notifications again - reset the failure bookkeeping
+                    if(sharedPref.getInt(PREF_KEY_ATTEMPT_COUNT + pkg, 0) != 0) {
+                        sharedPref.edit().putInt(PREF_KEY_ATTEMPT_COUNT + pkg, 0).apply()
+                    }
+                    Log.i(LOG_ID, "Source app $pkg is alive (last seen ${silentFor/1000}s ago, timeout ${timeoutMs/1000}s)")
+                    continue
                 }
+                // silent or never seen - decide whether a wake-up attempt is due now (B2/B3)
+                val lastAttempt = sharedPref.getLong(PREF_KEY_LAST_ATTEMPT + pkg, 0L)
+                val attemptCount = sharedPref.getInt(PREF_KEY_ATTEMPT_COUNT + pkg, 0)
+                // exponential back-off between wake-up attempts: base = reader interval + 1 min, doubles per failed attempt, capped at 30 min
+                val baseBackoffMs = (interval + 1) * 60 * 1000L
+                val backoffMs = minOf(baseBackoffMs * (1L shl attemptCount.coerceAtMost(MAX_BACKOFF_EXPONENT)), MAX_BACKOFF_MS)
+                if(now - lastAttempt < backoffMs) {
+                    Log.d(LOG_ID, "Source app $pkg still silent - skip wake-up (retry in ${(backoffMs - (now - lastAttempt))/1000}s)")
+                    continue
+                }
+                Log.w(LOG_ID, "Source app $pkg is silent (last seen: ${if(lastSeen>0) silentFor/1000 else "never"}s ago, timeout ${timeoutMs/1000}s) - try to wake it up (attempt ${attemptCount + 1})")
+                wakeUpApp(context, pkg)
+                sharedPref.edit()
+                    .putLong(PREF_KEY_LAST_ATTEMPT + pkg, now)
+                    .putInt(PREF_KEY_ATTEMPT_COUNT + pkg, attemptCount + 1)
+                    .apply()
             }
         } catch (exc: Exception) {
             Log.e(LOG_ID, "onReceive exception: " + exc.message.toString())
         } finally {
+            // The one-shot alarm has fired - clear StartupTrigger's in-memory schedule
+            // state so the next ensure() re-arms the periodic check chain.
+            StartupTrigger.wakeupCheckFired()
             // chain the next check - only schedules if the feature is still enabled
             StartupTrigger.ensureSourceWakeupCheck(context)
         }

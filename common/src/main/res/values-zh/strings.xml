@@ -494,6 +494,12 @@
     <string name="pref_app_language_system">跟随系统</string>
     <string name="gda_foreground_info">GlucoDataAuto 执行中</string>
     <string name="battery_optimization_disabled">已启用电池优化！\n点击此处停用</string>
+    <string name="overlay_permission_disabled">悬浮窗权限未开启！\nGlucoDataHandler 可能无法可靠地唤醒源应用。\n点击此处开启</string>
+    <string name="wakeup_permission_dialog_title">开启源应用保活需要权限</string>
+    <string name="wakeup_permission_dialog_message">周期唤醒所选源应用需要以下权限：\n\n%s\n\n点击确定打开第一个缺失的权限。开启后再次关闭/打开开关以引导下一个权限。</string>
+    <string name="permission_name_exact_alarm">精确闹钟</string>
+    <string name="permission_name_overlay">悬浮窗（显示在其他应用上层）</string>
+    <string name="permission_name_battery">忽略电池优化</string>
     <string name="gda_source_follower_info_summary">如果您使用追踪器数据来源且只使用 Android Auto 通知时，程序可能无法在连接 Android Auto 时自动启动\n若要确保程序能检测 Android Auto 连接，必须停用电池优化\n如果仍然无法运作，也可以启用前景模式，或在连接时于 Android Auto 中手动开启程序一次</string>
     <string name="gda_help_aa_title">设置 Android Auto</string>
     <string name="gda_help_aa_title_summary">Android Auto 可能是独立的程序或整合于系统中且可从 Android 设居中访问\n若要于 Android Auto 启用 GlucoDataAuto，您必须依照下列步骤: </string>
